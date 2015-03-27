@@ -1,0 +1,9 @@
+extends layout
+
+block content
+
+  if !session.user || session.user.username != page.user.username
+    h1= page.user.username
+  else
+    h1= session.user.username
+    a(href='/logout') Logout

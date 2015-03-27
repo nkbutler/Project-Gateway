@@ -1,0 +1,10 @@
+- if (!page) {page = {};}
+doctype html
+html
+  head
+    title= page.title
+    link(rel='stylesheet', href='/static/lib/bootstrap/3.3.2/css/bootstrap.min.css')
+    script(type='text/javascript' src='/static/lib/jquery/jquery-1.11.2.min.js')
+    script(type='text/javascript' src='/static/lib/bootstrap/3.3.2/js/bootstrap.min.js')
+  body
+    block content

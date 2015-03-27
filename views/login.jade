@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .login.well
+    h1 Log in
+    hr
+    form#login(method='POST', action='/login')
+      .form-group
+        label(for='username') Username
+        input#username(type='text', name='username', class='form-control', placeholder='Enter username')= forms.login.data.username
+      .form-group
+        label(for='password') Password
+        input#password(type='password', name='password', class='form-control', placeholder='Enter password')
+      if forms.login.errors._form
+        .form-group
+          div(class='alert alert-danger alert-dismissible', role='alert')
+            button(type="button", class="close", data-dismiss="alert", aria-label="Close")
+              span(aria-hidden="true") &times;
+            = forms.login.errors._form
+      .form-group
+        button.btn.btn-default Login
