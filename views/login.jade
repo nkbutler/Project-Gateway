@@ -1,21 +1,28 @@
 extends layout
-
+include ./include/forms.jade
 block content
-  .login.well
-    h1 Log in
-    hr
-    form#login(method='POST', action='/login')
-      .form-group
-        label(for='username') Username
-        input#username(type='text', name='username', class='form-control', placeholder='Enter username')= forms.login.data.username
-      .form-group
-        label(for='password') Password
-        input#password(type='password', name='password', class='form-control', placeholder='Enter password')
-      if forms.login.errors._form
+  .container
+    .well.col-md-6
+      h1 Create an account
+      hr
+      form#register(method='POST', action='/register')
+        +validatedInput("text", "email", "Email", "Enter your email address", forms.register.data.email, forms.register.errors.email)
+        +validatedInput("text", "username", "Username", "Choose a username", forms.register.data.username, forms.register.errors.username)
+        +validatedInput("password", "password", "Password", "Enter password", forms.register.data.password, forms.register.errors.password)
+        +validatedInput("password", "password2", "Confirm Password", "Confirm password", forms.register.data.password2, forms.register.errors.password2)
+        +formErrors(forms.register.errors._form)
         .form-group
-          div(class='alert alert-danger alert-dismissible', role='alert')
-            button(type="button", class="close", data-dismiss="alert", aria-label="Close")
-              span(aria-hidden="true") &times;
-            = forms.login.errors._form
-      .form-group
-        button.btn.btn-default Login
+          button.btn.btn-default Register
+    .well.col-md-5.col-md-offset-1
+      h1 or Log in
+      hr
+      form#login(method='POST', action='/login')
+        .form-group
+          label.hidden-xs(for='username') Username or email
+          input.form-control#username(type='text', name='username', placeholder='Enter username or email')= forms.login.data.username
+        .form-group
+          label.hidden-xs(for='password') Password
+          input.form-control#password(type='password', name='password', placeholder='Enter password')
+        +formErrors(forms.login.errors._form)
+        .form-group
+          button.btn.btn-default Login

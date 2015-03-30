@@ -1,0 +1,29 @@
+mixin validatedInput(type, name, label, placeholder, data, error)
+  if error
+    .form-group.has-error.has-feedback
+      label.hidden-xs(for=name)= label
+      input.form-control(id=name, type=type, name=name, placeholder=placeholder, value=data)
+      span.glyphicon.glyphicon-remove.form-control-feedback
+    each msg in error
+      +errorAlert(msg)
+  else if data
+    .form-group.has-success.has-feedback
+      label.hidden-xs(for=name)= label
+      input.form-control(id=name, type=type, name=name, placeholder=placeholder, value=data)
+      span.glyphicon.glyphicon-ok.form-control-feedback
+  else
+    .form-group
+      label.hidden-xs(for=name)= label
+      input.form-control(id=name, type=type, name=name, placeholder=placeholder, value=data)
+
+mixin formErrors(error)
+  if error
+    .form-group
+      each msg in error
+        +errorAlert(msg)
+
+mixin errorAlert(msg)
+  div.alert.alert-danger(role='alert')
+    button.close(type="button", data-dismiss="alert", aria-label="Close")
+      span(aria-hidden="true") &times;
+    = msg

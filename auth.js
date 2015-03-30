@@ -42,7 +42,7 @@ module.exports = {
   login : function(req, res, next) {
     return passport.authenticate('local', function(err, user, info) {
       if (user) {
-          req.login(user, function(err) {
+        req.login(user, function(err) {
           if (err) { return next(err); }
           next();
         });
@@ -73,6 +73,22 @@ module.exports = {
           res.end();
         }
       }
+    }
+  },
+  checkExists : function(user) {
+    var errors = {};
+    if (db.user.exists({username : user.username})) {
+      errors.username = true;
+    }
+    if (db.user.exists({email : user.email})) {
+      errors.email = true;
+    }
+    return errors;
+  },
+  create : function(user) {
+    var errors = this.checkExists(user)
+    if (!errors.username && !errors.email) {
+      db.user.add(user);
     }
   },
   register : passport.authenticate,
