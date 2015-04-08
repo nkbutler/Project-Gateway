@@ -16,21 +16,18 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  var user = getUser({id: id});
-  if (user) {
-    return done(null, user);
-  }
+  db.user.get(id, done);
 });
 
 passport.use(new strategy(
   function(username, password, done) {
-    var user = getUser({username: username});
-    if (user) {
-      if (user.password == password) {
-        return done(null, user);
+    db.user.get({username: username}, function(err, user) {
+      if (!err && user.password == password) {
+        done(null, user);
+      } else {
+        done(err, false);
       }
-    }
-    return done(null, false);
+    });
   }
 ));
 
@@ -75,21 +72,22 @@ module.exports = {
       }
     }
   },
-  checkExists : function(user) {
+  checkExists : function(user, cb) {
     var errors = {};
-    if (db.user.exists({username : user.username})) {
-      errors.username = true;
-    }
-    if (db.user.exists({email : user.email})) {
-      errors.email = true;
-    }
-    return errors;
+    db.user.exists({username : user.username}, function(err, nameExists) {
+      if (nameExists) {
+        errors.username = true;
+      }
+      db.user.exists({email : user.email}, function(err, emailExists) {
+        if (emailExists) {
+          errors.email = true;
+        }
+        cb(errors);
+      });
+    });
   },
-  create : function(user) {
-    var errors = this.checkExists(user)
-    if (!errors.username && !errors.email) {
-      db.user.add(user);
-    }
+  create : function(user, cb) {
+    db.user.add(user, cb);
   },
   register : passport.authenticate,
   passport : passport

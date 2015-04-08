@@ -18,7 +18,7 @@ login.route('/')
     }),
     function(req, res, next) {
       // Build the template rendering context
-      res.ctx = {
+      res.ctx.add({
         forms : {
           login : {
             errors : {},
@@ -29,7 +29,7 @@ login.route('/')
             data : {}
           }
         }
-      };
+      });
       next();
     }
   )
@@ -55,7 +55,7 @@ register.route('/')
   .all(
     function(req, res, next) {
       // Build the template rendering context
-      res.ctx = {
+      res.ctx.add({
         forms : {
           login : {
             errors : {},
@@ -66,7 +66,7 @@ register.route('/')
             data : {}
           }
         }
-      };
+      });
       next();
     }
   )
@@ -77,13 +77,13 @@ register.route('/')
   )
   .post(
     function(req, res, next) {
+      // TODO: replace this entire thing with real validation+sanitization.
       var error = false;
       var user = {
         username : req.body.username,
         email : req.body.email,
         password : req.body.password
       };
-      console.log(req.body);
 
       if (req.body.password != req.body.password2) {
         res.ctx.forms.register.errors.password = ["Passwords must match."];
@@ -103,24 +103,39 @@ register.route('/')
         }
         error = true;
       } else {
-        var errors = auth.checkExists(user);
-        if (errors.username || errors.email) {
-          if (errors.username) {
-            res.ctx.forms.register.errors.username = ["Username already in use."];
-            res.ctx.forms.register.data.username = req.body.username;
+        auth.checkExists(user, function(errors) {
+          if (errors.username || errors.email) {
+            if (errors.username) {
+              res.ctx.forms.register.errors.username = ["Username already in use."];
+              res.ctx.forms.register.data.username = req.body.username;
+            }
+            if (errors.email) {
+              res.ctx.forms.register.errors.email = ["Email address already in use."];
+              res.ctx.forms.register.data.email = req.body.email;
+            }
+            next('route');
+            return;
           }
-          if (errors.email) {
-            res.ctx.forms.register.errors.email = ["Email address already in use."];
-            res.ctx.forms.register.data.email = req.body.email;
-          }
-          error = true;
-        }
+          auth.create(user, function(err) {
+            if (err) {
+              next(err);
+            } else {
+              next();
+            }
+          });
+        });
+        return;
       }
       if (error) {
         next('route');
       } else {
-        auth.create(user);
-        next();
+        auth.create(user, function(err) {
+          if (err) {
+            next(err);
+          } else {
+            next();
+          }
+        });
       }
     },
     auth.login,

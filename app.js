@@ -6,8 +6,9 @@ var express       = require('express'),
     bodyParser    = require('body-parser'),
     jade          = require('jade'),
     session       = require('express-session'),
-    db            = require('./db');
-    auth          = require('./auth');
+    db            = require('./db'),
+    auth          = require('./auth'),
+    Context       = require('./context');
 
 var routes        = require('./routes/index');
 routes.users      = require('./routes/users');
@@ -30,6 +31,11 @@ app.use(session({
   resave: false,
 }));
 auth.init(app);
+
+app.use(function(req, res, next) {
+  res.ctx = new Context({page : {}});
+  next();
+});
 // routers
 app.use('/', routes);
 app.use('/users', routes.users);

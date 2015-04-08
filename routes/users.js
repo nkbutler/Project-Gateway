@@ -4,24 +4,25 @@ var express = require('express'),
 var router = express.Router();
 
 router.param('username', function(req, res, next, username) {
-    result = db.user.get({username : username}) || {};
-    req.page = req.page || {};
-    if (!result.err && result.length == 1) {
-        req.page.user = result[0];
+    db.user.get({username : username}, function(err, user) {
+      if (!err && user) {
+        req.page = req.page || {};
+        req.page.user = user;
         next();
-    } else {
+      } else {
         next(new Error("Page not found"));
-    }
+      }
+    });
 });
 
 router.route('/:username')
   .all(function(req, res, next) {
-    res.ctx = {
+    res.ctx.add({
       session : {
         user : req.user
       },
       page : req.page
-    };
+    });
     next();
   })
   .get(function(req, res, next) {
