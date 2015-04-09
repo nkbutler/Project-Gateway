@@ -18,6 +18,12 @@ router.param('username', function(req, res, next, username) {
 router.route('/:username')
   .all(function(req, res, next) {
     res.ctx.add({
+      forms : {
+        creategroup : {
+          errors : {},
+          data : {}
+        }
+      },
       session : {
         user : req.user
       },
@@ -27,6 +33,18 @@ router.route('/:username')
   })
   .get(function(req, res, next) {
     res.render('user', res.ctx);
-  });
+  })
+  .post(function(req, res, next) {
+    var error = false;
+    var group = {
+      name : req.body.name
+    };
+  if (error) {
+    next('route');
+  }
+  else {
+    db.group.add(group, cb)
+  }
+});
 
 module.exports = router;

@@ -6,3 +6,13 @@ block content
   else
     h1= session.user.username
     a(href='/logout') Logout
+  container
+    .well.col-md-6
+      h1 Create a Group
+      hr
+      form#creategroup(method='POST', action='/group')
+        .form-group
+          label.hidden-xs(for='name') Name for Group
+          input.form-control#name(type='text', name='name', placeholder='Enter a name for your group')= forms.creategroup.data$
+        .form-group
+          button.btn.btn-default Create
