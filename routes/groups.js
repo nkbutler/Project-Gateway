@@ -3,8 +3,8 @@ var express = require('express'),
     auth    = require('../auth');
 var router = express.Router();
 
-router.param('name', function(req, res, next, name) {
-    db.group.get({name : name}, function(err, group) {
+router.param('id', function(req, res, next, id) {
+    db.group.get({id : id}, function(err, group) {
       if (!err && group) {
         req.page = req.page || {};
         req.page.group = group;
@@ -15,7 +15,7 @@ router.param('name', function(req, res, next, name) {
     });
 });
 
-router.route('/:name')
+router.route('/:id')
   .all(function(req, res, next) {
     res.ctx.add({
       session : {

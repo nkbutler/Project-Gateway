@@ -39,12 +39,18 @@ router.route('/:username')
     var group = {
       name : req.body.name
     };
-  if (error) {
-    next('route');
-  }
-  else {
-    db.group.add(group, cb)
-  }
-});
+    // validation goes here
+    if (error) {
+      next('route');
+    } else {
+      db.group.add(group, function(err, result) {
+        if (!err) {
+          res.redirect('/groups/' + result.id + '-' + result.name);
+        } {
+          next(new Error('Error creating group'));
+        }
+      });
+    }
+  });
 
 module.exports = router;
