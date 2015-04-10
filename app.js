@@ -42,8 +42,8 @@ app.use('/', routes);
 app.use('/users', routes.users);
 //app.use('/login', routes.login);
 //app.use('/register', routes.register);
-app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/groups', routes.groups);
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

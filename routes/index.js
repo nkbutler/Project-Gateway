@@ -147,11 +147,17 @@ register.route('/')
 register.route('/')
   .all(
     function(req, res, next) {
-      res.render('login', res.ctx);
+      res.render('register', res.ctx);
     }
   );
 
-router.use('/', login);
+router.route('/')
+.all(
+  function(req, res, next) {
+    res.render('index', res.ctx);
+  }
+);
+
 router.use('/login', login);
 router.use('/register', register);
 router.route('/logout')
