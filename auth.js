@@ -20,14 +20,26 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new strategy(
-  function(username, password, done) {
-    db.user.get({username: username}, function(err, user) {
-      if (!err && user.password == password) {
-        done(null, user);
-      } else {
-        done(err, false);
-      }
-    });
+  function(login, password, done) {
+    var getcb = function(cb) {
+      return function(err, user) {
+        if (err) {
+          done(err);
+        } else if (user) {
+          if (user.password == password) {
+            done(null, user);
+          } else {
+            done();
+          }
+        } else {
+          cb();
+        }
+      };
+    };
+
+    db.user.get({username: login}, getcb(function(){
+      db.user.get({email: login}, getcb(done));
+    }));
   }
 ));
 
