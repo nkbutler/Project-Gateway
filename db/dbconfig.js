@@ -3,5 +3,5 @@ module.exports = conn_params = {
   socketPath    : '/var/run/mysqld/mysqld.sock',
   database      : 'gateway',
   user          : 'gateway',
-  password      : ''
+  password      : '',
 };
