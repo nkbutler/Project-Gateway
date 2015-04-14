@@ -40,26 +40,16 @@ router.route('/:id')
       targetuser : req.body.username
     };
 
-    /*
-    if (!req.body.username) {
-      res.ctx.forms.adduser.errors.targetuser = ["Invalid Username"];
-      res.ctx.forms.adduser.data.targeruser = undefined;
-      error = true;
-    }
-    */
-
     if (error) {
       next('route');
-    }
-    else {
-      db.user.get(username, function(err, result) {
-        if (!err {
+    } else {
+      db.user.get(req.body.username, function(err, result) {
+        if (!err) {
           members.group = group.members || [];
-            group.members.push({username});
+            group.members.push(username);
             db.group.save(group);
-          res.redirect('/groups/' + result.id '-' result.name);
-        }
-        else {
+            res.redirect('/groups/' + req.page.id - '-' + req.page.name);
+        } else {
           next(new Error('Error adding user'));
         }
       });

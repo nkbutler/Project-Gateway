@@ -8,7 +8,7 @@ block content
       .well.col-md-6
         h3 Add user to  a Group
         hr
-        form#adduser(method='POST', action='/groups/#{page.group.namename}' + '-' + '#{page.group.id}')
+        form#adduser(method='POST', action='/groups/#{page.group.id}-#{page.group.name}')
           .form-group
             label.hidden-xs(for='targetuser') User to Add
             input.form-control#targetuser(type='text', name='targetuser', placeholder='Enter a user to add')= forms.adduser.data$

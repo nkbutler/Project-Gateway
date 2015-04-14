@@ -1,7 +1,7 @@
 module.exports = conn_params = {
   protocol      : 'mysql',
-  host          : '127.0.0.1',
-  database      : 'nbutler',
-  user          : 'nbutler',
-  password      : '4109357'
+  socketPath    : '/var/run/mysqld/mysqld.sock',
+  database      : 'gateway',
+  user          : 'gateway',
+  password      : '',
 };
