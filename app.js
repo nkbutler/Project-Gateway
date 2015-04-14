@@ -13,6 +13,7 @@ var express       = require('express'),
 var routes        = require('./routes/index');
 routes.users      = require('./routes/users');
 routes.groups     = require('./routes/groups');
+routes.projects   = require('./routes/projects');
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use('/users', routes.users);
 //app.use('/register', routes.register);
 app.use('/groups', routes.groups);
 app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/projects', routes.projects);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
