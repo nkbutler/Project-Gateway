@@ -23,4 +23,12 @@ module.exports = {
       });
     }
   },
+  Project : {
+    schema : {
+      id          : {type: 'serial', key: true},
+      pname       : {type: 'text'},
+      pdescrip    : {type: 'text'},
+      created     : {type: 'date', time: true},
+    }
+  },
 }

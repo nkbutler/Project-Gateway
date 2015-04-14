@@ -1,4 +1,5 @@
 var orm         = require('orm');
+orm.settings.set("connection.debug", true);
 
 var Model = function(dbmodel) {
   this.dbmodel = dbmodel;
