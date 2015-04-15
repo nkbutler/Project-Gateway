@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= page.event.name
+    h3= page.event.descrip
+    h3= page.event.date
+    h3= page.event.location
+    a(href='/logout') Logout

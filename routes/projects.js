@@ -33,23 +33,46 @@ router.route('/:id')
   .get(function(req, res, next) {
     res.render('project', res.ctx);
   })
+
   .post(function(req, res, next) {
-    var error = false;
-    var task = {
-      name : req.body.name,
-      descrip : req.body.descrip
-    };
-    // validation goes here
-    if (error) {
-      next('route');
-    } else {
-      db.task.add(task, function(err, result) {
-        if (!err) {
-          res.redirect('/tasks/' + result.id + '-' + result.name);
-        } {
-          next(new Error('Error creating task'));
-        }
-      });
+    if (req.body.tname && req.body.tdescrip) {
+      var error = false;
+      var task = {
+        name : req.body.tname,
+        descrip : req.body.tdescrip
+      };
+      // validation goes here
+      if (error) {
+        next('route');
+      } else {
+        db.task.add(task, function(err, result) {
+          if (!err) {
+            res.redirect('/tasks/' + result.id + '-' + result.name);
+          } {
+            next(new Error('Error creating task'));
+          }
+        });
+      }
+    }
+    else {
+      var error = false;
+      var event = {
+	name : req.body.name,
+	descrip : req.body.descrip,
+	date : req.body.date,
+	location : req.body.location
+      };
+      if (error) {
+        next('route');
+      } else {
+        db.event.add(event, function(err, result) {
+	  if (!err) {
+	    res.redirect('/events/' + result.id + '-' + result.name);
+          } {
+	    next(new Error('Error creating event'));
+	  }
+	});
+      }
     }
   });
 

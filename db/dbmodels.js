@@ -46,7 +46,7 @@ module.exports = {
       id         : {type: 'serial', key: true},
       name       : {type: 'text'},
       descrip    : {type: 'text'},
-      date       : {type: 'date'},
+      date       : {type: 'date', time : true},
       location   : {type: 'text'},
       created    : {type: 'date', time: true},
     }
