@@ -14,5 +14,11 @@ block content
             label.hidden-xs(for='name') Name for Group
             input.form-control#name(type='text', name='name', placeholder='Enter a name for your group')= forms.creategroup.data$
           .form-group
+            label.hidden-xs(for='descrip') Description for Group
+            input.form-control#descrip(type='text', name='descrip', placeholder='Enter a short description of your group')
+          .form-group
+            label.hidden-xs(for='slogan') Motto for Group
+            input.form-control#slogan(type='text', name='slogan', placeholder='Enter the motto of your group')
+          .form-group
             button.btn.btn-default Create
     a(href='/logout') Logout

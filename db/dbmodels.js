@@ -12,6 +12,8 @@ module.exports = {
     schema : {
       id          : {type: 'serial', key: true},
       name        : {type: 'text'},
+      slogan      : {type: 'text'},
+      descrip     : {type: 'text'},
       created     : {type: 'date', time: true},
     },
     relations : function(dbModels) {
@@ -27,8 +29,26 @@ module.exports = {
     schema : {
       id          : {type: 'serial', key: true},
       pname       : {type: 'text'},
-      pdescrip    : {type: 'text'},
+      descrip     : {type: 'text'},
       created     : {type: 'date', time: true},
+    }
+  },
+  Task : {
+    schema : {
+      id         : {type: 'serial', key: true},
+      name       : {type: 'text'},
+      descrip    : {type: 'text'},
+      created    : {type: 'date', time: true},
+    }
+  },
+  Event : {
+    schema : {
+      id         : {type: 'serial', key: true},
+      name       : {type: 'text'},
+      descrip    : {type: 'text'},
+      date       : {type: 'date'},
+      location   : {type: 'text'},
+      created    : {type: 'date', time: true},
     }
   },
 }

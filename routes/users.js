@@ -37,7 +37,9 @@ router.route('/:username')
   .post(function(req, res, next) {
     var error = false;
     var group = {
-      name : req.body.name
+      name : req.body.name,
+      descrip : req.body.descrip,
+      slogan : req.body.slogan
     };
     // validation goes here
     if (error) {

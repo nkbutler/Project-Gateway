@@ -4,10 +4,10 @@ var express = require('express'),
 var router = express.Router();
 
 router.param('id', function(req, res, next, id) {
-    db.project.get({id : id}, function(err, project) {
-      if (!err && project) {
+    db.task.get({id : id}, function(err, task) {
+      if (!err && task) {
         req.page = req.page || {};
-        req.page.project = project;
+        req.page.task = task;
         next();
       } else {
         next(new Error("Page not found"));
@@ -31,13 +31,12 @@ router.route('/:id')
     next();
   })
   .get(function(req, res, next) {
-    res.render('project', res.ctx);
+    res.render('task', res.ctx);
   })
   .post(function(req, res, next) {
     var error = false;
     var task = {
-      name : req.body.name,
-      descrip : req.body.descrip
+      name : req.body.name
     };
     // validation goes here
     if (error) {

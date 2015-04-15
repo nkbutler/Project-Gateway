@@ -64,7 +64,8 @@ router.route('/:id')
   .post(function(req, res, next) {
     var error = false;
     var project = {
-      pname : req.body.pname
+      pname : req.body.pname,
+      descrip : req.body.descrip
     };
     // validation goes here
     if (error) {
