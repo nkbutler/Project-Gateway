@@ -2,44 +2,27 @@ var db       = require('./db'),
     passport = require('passport'),
     strategy = require('passport-local').Strategy;
 
-var getUser = function(param) {
-  var user = db.user.get(param);
-  if (user && user.length == 1) {
-    return user[0];
-  } else {
-    return undefined;
-  }
-}
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  db.user.get(id, done);
+  db.user.find(id).then(function(user){done(null, user)}).catch(done);
 });
 
 passport.use(new strategy(
   function(login, password, done) {
-    var getcb = function(cb) {
-      return function(err, user) {
-        if (err) {
-          done(err);
-        } else if (user) {
-          if (user.password == password) {
-            done(null, user);
-          } else {
-            done();
-          }
-        } else {
-          cb();
-        }
-      };
-    };
-
-    db.user.get({username: login}, getcb(function(){
-      db.user.get({email: login}, getcb(done));
-    }));
+    db.user.find({ where : { $or : { username : login, email : login } } })
+    .then(function(user) {
+      if (user && user.password == password) {
+        done(null, user);
+      } else {
+        done();
+      }
+    })
+    .catch(function(ex) {
+      done(ex);
+    });
   }
 ));
 
@@ -83,23 +66,6 @@ module.exports = {
         }
       }
     }
-  },
-  checkExists : function(user, cb) {
-    var errors = {};
-    db.user.exists({username : user.username}, function(err, nameExists) {
-      if (nameExists) {
-        errors.username = true;
-      }
-      db.user.exists({email : user.email}, function(err, emailExists) {
-        if (emailExists) {
-          errors.email = true;
-        }
-        cb(errors);
-      });
-    });
-  },
-  create : function(user, cb) {
-    db.user.add(user, cb);
   },
   register : passport.authenticate,
   passport : passport

@@ -1,21 +1,32 @@
-var engine      = require('./backends/orm'),
-    models      = require('./dbmodels'),
-    conn_params = require('./dbconfig'),
-    EventEmitter= require('events').EventEmitter;
+var engine       = require('./backends/sequelize'),
+    EventEmitter = require('events').EventEmitter,
+    models       = require('./dbmodels'),
+    conn_params  = require('./dbconfig');
 
-var db = new engine(conn_params, models, new EventEmitter());
+var db = function(conn_params, models) {
+  engine.call(this, conn_params, models, new EventEmitter());
+}
 
-db.status.on('ready', function() {
-  // test data pre-loads
-  db.user.add(
-    [
-      {username : "user1", password : "asdf", email : "a@s.df"},
-      {username : "user2", password : "asdf", email : "s@d.fa"},
-      {username : "user3", password : "asdf", email : "d@f.as"},
-      {username : "user4", password : "asdf", email : "f@a.sd"},
-    ],
-    function(err, res) { if (err) { throw err; } }
-  );
-});
+db.prototype = Object.create(engine.prototype);
+db.prototype.constructor = db;
+db.prototype.param = function(model, paramName) {
+  return function(req, res, next, param) {
+    var where = { where : {} };
+    where.where[paramName] = param;
+    model.find(where)
+    .then(function(data) {
+      if (data) {
+        req.page = req.page || {};
+        req.page[model.name.toLowerCase()] = data;
+        next();
+      } else {
+        next(new Error("Page not found"));
+      }
+    })
+    .error(function(ex) {
+      next(ex);
+    });
+  };
+};
 
-module.exports = db;
+module.exports = new db(conn_params, models);

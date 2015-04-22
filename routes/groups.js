@@ -3,17 +3,7 @@ var express = require('express'),
     auth    = require('../auth');
 var router = express.Router();
 
-router.param('id', function(req, res, next, id) {
-    db.group.get({id : id}, function(err, group) {
-      if (!err && group) {
-        req.page = req.page || {};
-        req.page.group = group;
-        next();
-      } else {
-        next(new Error("Page not found"));
-      }
-    });
-});
+router.param('id', db.param(db.group, 'id'));
 
 router.route('/:id')
   .all(function(req, res, next) {
@@ -67,18 +57,29 @@ router.route('/:id')
       pname : req.body.pname,
       descrip : req.body.descrip
     };
-    // validation goes here
-    if (error) {
-      next('route');
-    } else {
-      db.project.add(project, function(err, result) {
-        if (!err) {
-          res.redirect('/projects/' + result.id + '-' + result.pname);
-        } {
-          next(new Error('Error creating project'));
+    db.project.create(project)
+    .then(function(result) {
+      res.redirect('/projects/' + result.id + '-' + result.pname);
+    })
+    .catch(function(ex){
+      console.log(ex);
+      if (ex.message === 'Validation error') {
+        // validation vails
+        for (e in ex.errors) {                        // populate validation errors
+          var field = ex.errors[e].path,
+           msg = ex.errors[e].message;
+           res.ctx.forms.createproject.errors[field] = [msg];
+           if (field == 'password') {
+             continue;
+           } else {
+             res.ctx.forms.createproject.data[field]   = req.body[field];
+           }
         }
-      });
-    }
+        next('route');  // skip to error renderer
+      } else {
+        next(ex);       // other error
+      }
+    });
   });
 
 module.exports = router;

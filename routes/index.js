@@ -1,5 +1,6 @@
 var express  = require('express');
     auth     = require('../auth');
+    db       = require('../db');
 var router   = express.Router(),
     login    = express.Router(),
     register = express.Router();
@@ -77,66 +78,37 @@ register.route('/')
   )
   .post(
     function(req, res, next) {
-      // TODO: replace this entire thing with real validation+sanitization.
-      var error = false;
       var user = {
-        username : req.body.username,
-        email : req.body.email,
-        password : req.body.password
+        username  : req.body.username,
+        email     : req.body.email,
+        password  : req.body.password,
+        password2 : req.body.password2
       };
 
-      if (req.body.password != req.body.password2) {
-        res.ctx.forms.register.errors.password = ["Passwords must match."];
-        res.ctx.forms.register.data.username = req.body.username;
-        res.ctx.forms.register.data.email = req.body.email;
-        error = true;
-      }
-
-      if (!req.body.username || !req.body.email) {
-        if (!req.body.email) {
-          res.ctx.forms.register.errors.email = ["Invalid email."];
-          res.ctx.forms.register.data.email = undefined;
-        }
-        if (!req.body.username) {
-          res.ctx.forms.register.errors.username = ["Invalid username."];
-          res.ctx.forms.register.data.username = undefined;
-        }
-        error = true;
-      } else {
-        auth.checkExists(user, function(errors) {
-          if (errors.username || errors.email) {
-            if (errors.username) {
-              res.ctx.forms.register.errors.username = ["Username already in use."];
-              res.ctx.forms.register.data.username = req.body.username;
-            }
-            if (errors.email) {
-              res.ctx.forms.register.errors.email = ["Email address already in use."];
-              res.ctx.forms.register.data.email = req.body.email;
-            }
-            next('route');
-            return;
-          }
-          auth.create(user, function(err) {
-            if (err) {
-              next(err);
+      db.user.create(user)
+      .then(function(user){
+        console.log(user);
+        next();
+      })
+      .catch(function(ex){
+        console.log(ex);
+        if (ex.message === 'Validation error') {
+          // validation vails
+          for (e in ex.errors) {                        // populate validation errors
+            var field = ex.errors[e].path,
+            msg = ex.errors[e].message;
+            res.ctx.forms.register.errors[field] = [msg];
+            if (field == 'password') {
+              continue;
             } else {
-              next();
+              res.ctx.forms.register.data[field]   = req.body[field];
             }
-          });
-        });
-        return;
-      }
-      if (error) {
-        next('route');
-      } else {
-        auth.create(user, function(err) {
-          if (err) {
-            next(err);
-          } else {
-            next();
           }
-        });
-      }
+          next('route');  // skip to error renderer
+        } else {
+          next(ex);       // other error
+        }
+      });
     },
     auth.login,
     function(req, res, next) {

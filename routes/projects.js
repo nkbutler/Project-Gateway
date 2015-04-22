@@ -3,17 +3,7 @@ var express = require('express'),
     auth    = require('../auth');
 var router = express.Router();
 
-router.param('id', function(req, res, next, id) {
-    db.project.get({id : id}, function(err, project) {
-      if (!err && project) {
-        req.page = req.page || {};
-        req.page.project = project;
-        next();
-      } else {
-        next(new Error("Page not found"));
-      }
-    });
-});
+router.param('id', db.param(db.project, 'id'));
 
 router.route('/:id')
   .all(function(req, res, next) {

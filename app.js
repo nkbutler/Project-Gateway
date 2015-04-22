@@ -2,20 +2,30 @@ var express       = require('express'),
     path          = require('path'),
     favicon       = require('serve-favicon'),
     logger        = require('morgan'),
-    //cookieParser  = require('cookie-parser'),
     bodyParser    = require('body-parser'),
     jade          = require('jade'),
     session       = require('express-session'),
-    db            = require('./db'),
+    db            = require('./db');
     auth          = require('./auth'),
     Context       = require('./context');
 
-var routes        = require('./routes/index');
-routes.users      = require('./routes/users');
-routes.groups     = require('./routes/groups');
-routes.projects   = require('./routes/projects');
-routes.tasks      = require('./routes/tasks');
-routes.events     = require('./routes/events');
+db.status.on('ready', function() {
+  db.user.bulkCreate([
+    {username : "user1", password : "asdf", email : "a@fs.da"},
+    {username : "user2", password : "asdf", email : "a@sd.fa"},
+    {username : "user3", password : "asdf", email : "s@df.as"},
+    {username : "user4", password : "asdf", email : "f@ds.fa"}
+  ]);
+});
+
+var routes = {
+  index    : require('./routes/index'),
+  users    : require('./routes/users'),
+  groups   : require('./routes/groups'),
+  projects : require('./routes/projects'),
+  tasks    : require('./routes/tasks'),
+  events   : require('./routes/events')
+};
 
 var app = express();
 
@@ -24,11 +34,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // middleware stack
-//app.use(favicon(__dirname + '/static/favicon.ico'));
 app.use(logger('dev'));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(cookieParser('SECRET_KEY_GOES_HERE'));
 app.use(session({
   secret: 'SECRET_KEY_GOES_HERE',
   saveUninitialized: true,
@@ -41,15 +50,23 @@ app.use(function(req, res, next) {
   next();
 });
 // routers
-app.use('/', routes);
+for (route in routes) {
+  var path;
+  if (route == 'index') {
+    path = '/';
+  } else {
+    path = '/' + route;
+  }
+  app.use(path, routes[route]);
+}
+/*
+app.use('/', routes.index);
 app.use('/users', routes.users);
-//app.use('/login', routes.login);
-//app.use('/register', routes.register);
 app.use('/groups', routes.groups);
-app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/projects', routes.projects);
 app.use('/tasks', routes.tasks);
 app.use('/events', routes.events);
+*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
