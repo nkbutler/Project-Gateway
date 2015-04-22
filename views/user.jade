@@ -1,13 +1,22 @@
 extends layout
 
 block content
+ .container
+    .row
+      div#header
+      br
+      p.text-center ______________________________________________
+      h1.text-center GATEWAY
+      h1.text-center PROJECT DESIGN
+      p.text-center ______________________________________________
+ center
   if !session.user || session.user.username != page.user.username
     h1= page.user.username
   else
     h1= session.user.username
-    .container
-      .well.col-md-6
-        h1 Create a Group
+ .container
+      .well.col-md-4.col-md-offset-4
+        h1 Create A Group
         hr
         form#creategroup(method='POST', action='/users/#{page.user.username}')
           .form-group
@@ -21,4 +30,5 @@ block content
             input.form-control#slogan(type='text', name='slogan', placeholder='Enter the motto of your group')
           .form-group
             button.btn.btn-default Create
-    a(href='/logout') Logout
+ .col-md-4.col-md-offset-4.text-center
+      a(href='/logout') Logout
