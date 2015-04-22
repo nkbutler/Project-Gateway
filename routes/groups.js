@@ -52,34 +52,13 @@ router.route('/:id')
   })
   */
   .post(function(req, res, next) {
-    var error = false;
     var project = {
-      pname : req.body.pname,
-      descrip : req.body.descrip
+      name        : req.body.name,
+      description : req.body.description
     };
-    db.project.create(project)
-    .then(function(result) {
-      res.redirect('/projects/' + result.id + '-' + result.pname);
-    })
-    .catch(function(ex){
-      console.log(ex);
-      if (ex.message === 'Validation error') {
-        // validation vails
-        for (e in ex.errors) {                        // populate validation errors
-          var field = ex.errors[e].path,
-           msg = ex.errors[e].message;
-           res.ctx.forms.createproject.errors[field] = [msg];
-           if (field == 'password') {
-             continue;
-           } else {
-             res.ctx.forms.createproject.data[field]   = req.body[field];
-           }
-        }
-        next('route');  // skip to error renderer
-      } else {
-        next(ex);       // other error
-      }
-    });
+    db.project.create(group)
+    .then(function(result) { res.redirect('/projects/' + result.id + '-' + result.name); })
+    .catch(db.validationHandler(req, res, next));
   });
 
 module.exports = router;

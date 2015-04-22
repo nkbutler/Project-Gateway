@@ -1,0 +1,38 @@
+extends ../mainLayout
+
+block content
+  h1= page.project.name
+  h3= page.project.description
+  .container
+    .well.col-md-6
+      h1 Create a Task
+      hr
+      form#createtask
+        .form-group
+          label.hidden-xs(for='name') Name for Task
+          input.form-control#name(type='text', name='name', placeholder='Enter a name for your task')
+        .form-group
+          label.hidden-xs(for='description') Description for Task
+          input.form-control#description(type='text', name='description', placeholder='Enter a short description for your task')
+        .form-group
+          button.btn.btn-default Create
+      a(href='/logout') Logout
+    .well.col-md-6
+      h1 Create an Event
+      hr
+      form#createevent
+        .form-group
+          label.hidden-xs(for='name') Name of Event
+          input.form-control#name(type='text', name='name', placeholder='Enter a name for your event')
+        .form-group
+          label.hidden-xs(for='description') Description of Event
+          input.form-control#description(type='text', name='description', placeholder='Enter a short description of your event')
+        .form-group
+          label.hidden-xs(for='date') Date of Event
+          input.form-control#date(type='date', name='date', placeholder='Enter the date of your event')
+        .form-group
+          label.hidden-xs(for='location') Location of Event
+          input.form-control#location(type='text', name='location', placeholder='Enter the location of your event')
+        .form-group
+          button.btn.btn-default Create
+      a(href='/logout') Logout

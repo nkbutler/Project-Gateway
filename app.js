@@ -20,7 +20,7 @@ db.status.on('ready', function() {
 
 var routes = {
   index    : require('./routes/index'),
-  users    : require('./routes/users'),
+  user     : require('./routes/users'),
   groups   : require('./routes/groups'),
   projects : require('./routes/projects'),
   tasks    : require('./routes/tasks'),
@@ -82,10 +82,11 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.ctx.add({
       message: err.message,
       error: err
     });
+    res.render('error', res.ctx);
   });
 }
 
@@ -93,10 +94,11 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
+  res.ctx.add({
     message: err.message,
     error: {}
   });
+  res.render('error', res.ctx);
 });
 
 

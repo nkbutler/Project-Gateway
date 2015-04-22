@@ -11,8 +11,8 @@ router.route('/:id')
       forms : {
         createtask : {
           errors : {},
-	  data : {}
-	}
+          data : {}
+        }
       },
       session : {
       },
@@ -47,21 +47,21 @@ router.route('/:id')
     else {
       var error = false;
       var event = {
-	name : req.body.name,
-	descrip : req.body.descrip,
-	date : req.body.date,
-	location : req.body.location
+        name : req.body.name,
+        descrip : req.body.descrip,
+        date : req.body.date,
+        location : req.body.location
       };
       if (error) {
         next('route');
       } else {
         db.event.add(event, function(err, result) {
-	  if (!err) {
-	    res.redirect('/events/' + result.id + '-' + result.name);
+          if (!err) {
+            res.redirect('/events/' + result.id + '-' + result.name);
           } {
-	    next(new Error('Error creating event'));
-	  }
-	});
+            next(new Error('Error creating event'));
+          }
+        });
       }
     }
   });

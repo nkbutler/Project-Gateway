@@ -1,0 +1,36 @@
+extends ../baseLayout
+block head
+  script(type='text/javascript', src='static/js/ajaxform.js')
+  script(type='text/javascript', src='static/js/ajaxform-bootstrap.js')
+  script(type='text/javascript').
+    $('document').ready(function(){
+      forms.register.onSuccess(function(res){
+        if (res.status === 0) {
+          location.assign('/user');
+        }
+      })
+    });
+block body
+  .container
+    .row
+      #header.jumbotron.col-md-6.col-md-offset-3
+        h1.text-center Project Gateway
+    .row
+      .well.col-md-6.col-md-offset-3
+        h1 Create an account
+        hr
+        form#register(action='/register')
+          .form-group#email
+            label.hidden-xs(for='email') Email
+            input#email.form-control(type='text', name='email', placeholder='Enter your email address')
+          .form-group#username
+            label.hidden-xs(for='username') Username
+            input#username.form-control(type='text', name='username', placeholder='Choose a username')
+          .form-group#password
+            label.hidden-xs(for='password') Password
+            input#password.form-control(type='password', name='password', placeholder='Enter password')
+          .form-group#password2
+            label.hidden-xs(for='password2') Confirm Password
+            input#password2.form-control(type='password', name='password2', placeholder='Confirm password')
+          .form-group
+            button.btn.btn-default.btn-block Register

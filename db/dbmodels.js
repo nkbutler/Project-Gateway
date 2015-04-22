@@ -65,7 +65,7 @@ module.exports = {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
       name        : { type : Sequelize.STRING },
       slogan      : { type : Sequelize.STRING },
-      descrip     : { type : Sequelize.STRING },
+      description : { type : Sequelize.STRING },
       created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
     },
     relations : function() {
@@ -81,27 +81,25 @@ module.exports = {
   Project : {
     schema : {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      pname       : { type : Sequelize.STRING },
-      descrip     : { type : Sequelize.STRING },
+      name        : { type : Sequelize.STRING },
+      description : { type : Sequelize.STRING },
       created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
     }
   },
   Task : {
     schema : {
-      id         : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      name       : { type : Sequelize.STRING },
-      descrip    : { type : Sequelize.STRING },
-      created    : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+      id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+      name        : { type : Sequelize.STRING },
+      description : { type : Sequelize.STRING }
     }
   },
   Event : {
     schema : {
-      id         : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      name       : { type : Sequelize.STRING },
-      descrip    : { type : Sequelize.STRING },
-      date       : {type: 'date', time : true},
-      location   : { type : Sequelize.STRING },
-      created    : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+      id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+      name        : { type : Sequelize.STRING },
+      description : { type : Sequelize.STRING },
+      date        : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+      location    : { type : Sequelize.STRING }
     }
   },
 };

@@ -1,0 +1,35 @@
+extends ../baseLayout
+block head
+  script(type='text/javascript', src='static/js/ajaxform.js')
+  script(type='text/javascript', src='static/js/ajaxform-bootstrap.js')
+  script(type='text/javascript').
+    $('document').ready(function(){
+      forms.login.onSuccess(function(res){
+        if (res.status === 0) {
+          location.assign('/user');
+        }
+      })
+    });
+block body
+  .container
+    .row
+      #header.jumbotron.col-md-6.col-md-offset-3
+        h1.text-center Project Gateway
+    .row
+      .well.col-md-6.col-md-offset-3
+        h1 Sign In
+        hr
+        form#login(action='/login')
+          .form-group
+            label.hidden-xs(for='username')
+              span.glyphicon.glyphicon-user &nbsp;
+              span Username or Email
+            input.form-control#username(type='text', name='username', placeholder='Username or Email')
+          .form-group
+            label.hidden-xs(for='password') Password
+            input.form-control#password(type='password', name='password', placeholder='Password')
+          .form-group
+            button.btn.btn-default.btn-block Sign in
+    .row
+      .col-md-4.col-md-offset-4.text-center
+        a(href='/register') Create an account

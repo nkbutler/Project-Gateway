@@ -5,61 +5,64 @@ var router = express.Router();
 
 router.param('username', db.param(db.user, 'username'));
 
-router.route('/:username')
-  .all(function(req, res, next) {
-    res.ctx.add({
-      forms : {
-        creategroup : {
-          errors : {},
-          data : {}
-        }
-      },
-      session : {
-        user : req.user
-      },
-      page : req.page
-    });
-    next();
-  })
-  .get(function(req, res, next) {
-    res.render('user', res.ctx);
-  })
-  .post(function(req, res, next) {
-    var error = false;
-    var group = {
-      name : req.body.name,
-      descrip : req.body.descrip,
-      slogan : req.body.slogan
-    };
-    db.group.create(group)
-    .then(function(result) { res.redirect('/groups/' + result.id + '-' + result.name); })
-    .catch(function(ex){
-      console.log(ex);
-      if (ex.message === 'Validation error') {
-        // validation vails
-        for (e in ex.errors) {                        // populate validation errors
-          var field = ex.errors[e].path,
-           msg = ex.errors[e].message;
-           res.ctx.forms.register.errors[field] = [msg];
-           if (field == 'password') {
-             continue;
-           } else {
-             res.ctx.forms.register.data[field]   = req.body[field];
-           }
-        }
-        next('route');  // skip to error renderer
-      } else {
-        next(ex);       // other error
-      }
-    });
+var authCheck = auth.check({
+  onSuccess : function(req, res, next) { next(); },
+  onFailure : function(req, res, next) { res.redirect('/login'); }
+});
 
+var buildContext = function(req, res, next) {
+  var session = { user : req.user };
+  var page = req.page || session;
+  res.ctx.add({
+    session : session,
+    page    : page
   });
+  console.log(res.ctx);
+  next();
+}
 
-router.route('/')
-.all(
-  function(req, res, next) {
-    res.render('user', res.ctx);
-  }
-);
+router.route(['/groups', '/:username/groups'])
+  .get(
+    authCheck,
+    buildContext,
+    function(req, res, next) {
+      res.render('user/groups', res.ctx);
+    }
+  )
+  .post(
+    function(req, res, next) {
+      var group = {
+        name        : req.body.name,
+        description : req.body.description,
+        slogan      : req.body.slogan
+      };
+      db.group.create(group)
+      .then(function(result) { res.send({ status : 0 }); })
+      .catch(db.validationHandler(req, res, next));
+    }
+  );
+
+router.route(['/projects', '/:username/projects'])
+  .get(
+    authCheck,
+    buildContext,
+    function(req, res, next) {
+      res.render('user/projects', res.ctx);
+    }
+  );
+
+router.route('/').get(authCheck);
+
+router.route(['/', '/:username'])
+  .get(
+    buildContext,
+    function(req, res, next) {
+      if (req.page && req.user == req.page.user) {
+        res.render('user/home', res.ctx);
+      } else {
+        res.render('user/view', res.ctx);
+      }
+    }
+  )
 
 module.exports = router;
