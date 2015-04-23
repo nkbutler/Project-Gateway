@@ -62,6 +62,10 @@ module.exports = {
         listGroups : function() {
           var query = 'SELECT DISTINCT g.id, g.name, g.slogan, g.description, t.members, m.joined, g.created FROM `Members` m INNER JOIN `Group` g ON m.GroupId = g.id INNER JOIN (SELECT m.GroupId, count(m.UserId) as members FROM `Members` m GROUP BY m.GroupId) t ON t.GroupId = g.id WHERE m.UserId = ' + this.id + ';';
           return this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        },
+        diffGroups : function(user) {
+          var query = 'SELECT g.* FROM `Group` g INNER JOIN Members m ON g.id = m.GroupId WHERE m.UserId = ' + this.id + ' AND m.GroupId NOT IN (SELECT GroupId FROM `Members` WHERE UserId = ' + user.id + ');';
+          return this.sequelize.query(query, this.sequelize.models.Group);
         }
       }
     },

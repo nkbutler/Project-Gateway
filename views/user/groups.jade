@@ -38,5 +38,25 @@ block content
                   td #{group.members}
                   td #{group.joined}
                   td &nbsp;
+          if addgroups
+            if addgroups.length > 0
+              form#addgroup.form-inline
+                .form-group
+                  label.hidden-xs(for='group') Add User to Group &nbsp;
+                  select.form-control(name='group')
+                    each group in addgroups
+                      option(value=group.id) #{group.name}
+                button.btn.btn-default(type='submit') Add
+              script(type='text/javascript').
+                $('document').ready(function(){
+                  forms.addgroup.onSuccess(function(res) {
+                    if (res.status === 0) {
+                      window.location.reload();
+                    }
+                  });
+                });
+            else
+              p #{page.user.username} is already a member of all of your groups.
+
         else
-          #{page.user.username} is not a member of any groups yet.
+          p #{page.user.username} is not a member of any groups yet.

@@ -57,10 +57,67 @@ router.route(['/groups', '/:username/groups'])
         res.ctx.add({
           groups : groups
         });
-        res.render('user/groups', res.ctx);
+        next('route');
       });
     }
   )
+  .post(
+    function(req, res, next) {
+      if (!req.params.username) {
+        ajaxAuth(req, res, next);
+      } else {
+        next();
+      }
+    },
+    function(req, res, next) {
+      if (req.user && req.page.user.id != req.user.id) {
+        req.user.diffGroups(req.page.user)
+        .then(function(data) {
+          var pk = req.body.addgroup.group;
+          var group;
+          for (i in data) {
+            if (data[i].id == pk) {
+              group = data[i];
+              break;
+            }
+          }
+          if (group) {
+            req.page.user.addGroup(group);
+            res.send({status : 0});
+          } else {
+            next('route');
+          }
+        });
+      } else {
+        next('route');
+      }
+    }
+  )
+
+router.route('/groups')
+.get(function(req, res, next) {
+  next('route');
+});
+
+router.route('/:username/groups')
+.get(function(req, res, next) {
+  if (req.user && req.page.user.id != req.user.id) {
+    req.user.diffGroups(req.page.user)
+    .then(function(data) {
+      res.ctx.add({
+        addgroups : data
+      });
+      next('route');
+    });
+  } else {
+    next('route');
+  }
+});
+
+router.route(['/groups', '/:username/groups'])
+.get(function(req, res, next) {
+  res.render('user/groups', res.ctx);
+});
 
 router.route(['/projects', '/:username/projects'])
   .get(
@@ -83,10 +140,11 @@ router.route('/groups/add')
     ajaxAuth,
     function(req, res, next) {
       var group = {
-        name        : req.body.creategroup.name,
-        slogan      : req.body.creategroup.slogan,
-        description : req.body.creategroup.description
+        name        : req.body.creategroup.name || '',
+        slogan      : req.body.creategroup.slogan || '',
+        description : req.body.creategroup.description || ''
       };
+      group.name = group.name.trim();
       db.group.create(group)
       .then(function(result) {
         req.user.addGroup(result);
