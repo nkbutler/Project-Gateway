@@ -26,9 +26,10 @@ module.exports = function(dbparams, models, statusEmitter) {
     }
   }
   for (var name in models) {
-    for (var i in models[name].relations) {
-      var rel = models[name].relations[i];
-      if (typeof models[name].relations[i] == 'function') {
+    var model = models[name];
+    for (var i in model.relations) {
+      var rel = model.relations[i];
+      if (typeof model.relations[i] == 'function') {
         rel.call(this._models);
       }
     }

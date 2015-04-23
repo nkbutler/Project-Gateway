@@ -15,16 +15,45 @@ db.status.on('ready', function() {
     {username : "user2", password : "asdf", email : "a@sd.fa"},
     {username : "user3", password : "asdf", email : "s@df.as"},
     {username : "user4", password : "asdf", email : "f@ds.fa"}
-  ]);
+  ]).then(function() {
+    db.group.bulkCreate([
+      {name : "group1", slogan: "group 1 slogan", description : "group 1 description"},
+      {name : "group2", slogan: "group 2 slogan", description : "group 2 description"},
+      {name : "group3", slogan: "group 3 slogan", description : "group 3 description"},
+      {name : "group4", slogan: "group 4 slogan", description : "group 4 description"}
+    ]).then(function() {
+      db.project.bulkCreate([
+        {name : "project1", description : "project 1 description"},
+        {name : "project2", description : "project 2 description"},
+        {name : "project3", description : "project 3 description"},
+        {name : "project4", description : "project 4 description"}
+      ]).then(function() {
+        db.user.findAll().then(function(users) {
+          db.group.findAll().then(function(groups) {
+            db.project.findAll().then(function(projects) {
+              groups[0].setUsers([users[0], users[1], users[2]]);
+              groups[1].setUsers([          users[1], users[2]]);
+              groups[2].setUsers([users[0],           users[2], users[3]]);
+              groups[3].setUsers([          users[1]]);
+              projects[0].setGroups([groups[0], groups[1],            groups[3]]);
+              projects[1].setGroups([                      groups[2],          ]);
+              projects[2].setGroups([groups[0],            groups[2],          ]);
+              projects[3].setGroups([                      groups[2], groups[3]]);
+            })
+          })
+        })
+      });
+    });
+  });
+
+
 });
 
 var routes = {
   index    : require('./routes/index'),
   user     : require('./routes/users'),
-  groups   : require('./routes/groups'),
-  projects : require('./routes/projects'),
-  tasks    : require('./routes/tasks'),
-  events   : require('./routes/events')
+  group    : require('./routes/groups'),
+  project  : require('./routes/projects')
 };
 
 var app = express();

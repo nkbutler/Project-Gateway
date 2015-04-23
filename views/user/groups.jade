@@ -13,17 +13,30 @@ block content
         li: a(href='/user/' + page.user.username + '/projects') Projects
     .col-md-9
       block userContent
-      h1 Create a Group
-      hr
-      form#creategroup
-        .form-group
-          label.hidden-xs(for='name') Name for Group
-          input.form-control#name(type='text', name='name', placeholder='Enter a name for your group')
-        .form-group
-          label.hidden-xs(for='description') Description for Group
-          input.form-control#description(type='text', name='description', placeholder='Enter a short description of your group')
-        .form-group
-          label.hidden-xs(for='slogan') Motto for Group
-          input.form-control#slogan(type='text', name='slogan', placeholder='Enter the motto of your group')
-        .form-group
-          button.btn.btn-default Create
+        if session && session.user && session.user.username === page.user.username
+          h1 Your Groups
+          hr
+          a.btn.btn-default(href='/user/groups/add') Create a group
+          br
+        else
+          h1 #{page.user.username}'s Groups
+          hr
+        br
+        if groups
+          .panel.panel-default
+            table.table
+              tr
+                th Name
+                th Slogan
+                th Members
+                th Joined
+                th &nbsp;
+              each group in groups
+                tr
+                  td: a(href='/group/' + group.id + '-' + group.name) #{group.name}
+                  td #{group.slogan}
+                  td #{group.members}
+                  td #{group.joined}
+                  td &nbsp;
+        else
+          #{page.user.username} is not a member of any groups yet.

@@ -24,7 +24,7 @@ db.prototype.param = function(model, paramName, onSuccess, onError) {
         next(new Error("Page not found"));
       }
     })
-    .error(function(ex) { next(ex); });
+    .catch(function(ex) { next(ex); });
   };
 };
 db.prototype.validationHandler = function(req, res, next, params) {

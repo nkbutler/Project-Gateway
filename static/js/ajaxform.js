@@ -18,8 +18,12 @@
     };
     // onEvent()
     cls.prototype[eventName] = function(func) {
-      this.handlers[handlerName] = this.handlers[handlerName] || [];
-      if (typeof func != 'function') { this.handlers[handlerName] = []; }
+      if (typeof func != 'function') {
+        this.handlers[handlerName] = [];
+        return;
+      } else {
+        this.handlers[handlerName] = this.handlers[handlerName] || [];
+      }
       this.handlers[handlerName].push(func);
     };
   }
@@ -82,7 +86,7 @@
     };
     var fieldObj = this;
     params.success = function(res) { fieldObj.getSuccess(res) };
-    params.error   = function(res) { fieldObj.getError(res) };
+    params.error   = function(err) { fieldObj.getError(err) };
     $.ajax(params);
   };
 
@@ -138,7 +142,7 @@
     };
     var formObj = this;
     params.success = function(res) { formObj.success(res) };
-    params.error   = function(res) { formObj.error(res) };
+    params.error   = function(err) { formObj.error(err) };
     $.ajax(params, 'json');
   };
 

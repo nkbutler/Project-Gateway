@@ -24,7 +24,7 @@ var methods = {
   formatResult : function(formatter) {
     return function(next) {
       // return a list of all usernames, firstnames, lastnames
-      this.findAll().success(function(data) {
+      this.findAll().then(function(data) {
         var result = [];
         for (i in data) {
           var row = data[i];
@@ -47,8 +47,8 @@ module.exports = {
       password2   : { type : Sequelize.VIRTUAL }
     },
     validations : {
-      username    : validators.unique('username', 'Username already in use.'),
-      email       : validators.unique('email', 'Email address already in use.')
+      username    : { unique : validators.unique('username', 'Username already in use.') },
+      email       : { unique : validators.unique('email', 'Email address already in use.') }
     },
     options : {
       validate : {
@@ -57,8 +57,14 @@ module.exports = {
             throw new Error('Passwords must match');
           }
         }
+      },
+      instanceMethods : {
+        listGroups : function() {
+          var query = 'SELECT DISTINCT g.id, g.name, g.slogan, g.description, t.members, m.joined, g.created FROM `Members` m INNER JOIN `Group` g ON m.GroupId = g.id INNER JOIN (SELECT m.GroupId, count(m.UserId) as members FROM `Members` m GROUP BY m.GroupId) t ON t.GroupId = g.id WHERE m.UserId = ' + this.id + ';';
+          return this.sequelize.query(query, { type: this.sequelize.QueryTypes.SELECT });
+        }
       }
-    }
+    },
   },
   Group : {
     schema : {
@@ -68,10 +74,13 @@ module.exports = {
       description : { type : Sequelize.STRING },
       created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
     },
-    relations : function() {
-      this.Group.belongsToMany(this.User, { through : this.Members, as : 'members' });
-      this.User.belongsToMany(this.Group, { through : this.Members, as : 'groups' });
-    }
+    validations : {
+      name        : { notEmpty : { msg : 'Invalid name.' }, is: { msg : 'Invalid name.', args : /^[a-z 0-9\-]+$/i } }
+    },
+    relations : [function() {
+      this.Group.belongsToMany(this.User, { through : this.Members });
+      this.User.belongsToMany(this.Group, { through : this.Members });
+    }]
   },
   Members : {
     schema : {
@@ -84,7 +93,11 @@ module.exports = {
       name        : { type : Sequelize.STRING },
       description : { type : Sequelize.STRING },
       created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
-    }
+    },
+    relations : [function() {
+      this.Group.belongsToMany(this.Project, { through : 'ProjectGroup' });
+      this.Project.belongsToMany(this.Group, { through : 'ProjectGroup' });
+    }]
   },
   Task : {
     schema : {
