@@ -31,7 +31,6 @@ var buildContext = function(req, res, next) {
     session : session,
     page    : page
   });
-  console.log(res.ctx);
   next();
 };
 
@@ -53,7 +52,6 @@ router.route(['/groups', '/:username/groups'])
           }
           groups.push(row);
         }
-        console.log(groups);
         res.ctx.add({
           groups : groups
         });

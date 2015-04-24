@@ -45,8 +45,6 @@ db.status.on('ready', function() {
       });
     });
   });
-
-
 });
 
 var routes = {

@@ -4,9 +4,14 @@ block head
   script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
   script(type='text/javascript').
     $('document').ready(function() {
-      forms.creategroup.onError(function(err){
+      forms.creategroup.onError(function(err) {
         if (err.responseJSON.status == 'NOT_AUTHORIZED') {
           window.location.assign('/login');
+        }
+      });
+      forms.creategroup.onSuccess(function(res) {
+        if (res.status == 0) {
+          window.location.assign('/user/groups');
         }
       });
     });

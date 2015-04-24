@@ -27,17 +27,23 @@
         fieldObj.onSuccess(function(){
           this.clear();
           this.parent.addClass('has-success has-feedback');
-          this.parent.append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
+          if (this.field.prop('tagName') !== 'SELECT') {
+            this.parent.append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
+          }
         });
         fieldObj.onError(function(err){
           this.clear();
           this.parent.addClass('has-error has-feedback');
-          this.parent.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+          if (this.field.prop('tagName') !== 'SELECT') {
+            this.parent.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+          }
           if (err) { this.parent.append(createAlert(err)); }
         });
         fieldObj.onClear(function(){
           this.parent.removeClass('has-success has-error has-feedback');
-          this.parent.find('>span').remove();
+          if (this.field.prop('tagName') !== 'SELECT') {
+            this.parent.find('>span').remove();
+          }
           this.parent.find('div.alert').remove();
         });
       });

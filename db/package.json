@@ -1,4 +1,5 @@
 {
   "name" : "DAL",
-  "main" : "dal.js"
+  "main" : "dal.js",
+  "private": true
 }
