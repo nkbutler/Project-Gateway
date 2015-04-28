@@ -154,6 +154,31 @@ router.route('/groups/add')
     }
   );
 
+router.route('/projects/add')
+  .get(
+    authzCheck,
+    buildContext, 
+    function(req, res, next) {
+      res.render('user/createProject', res.ctx);
+    }
+  )
+  .post(
+    ajaxAuth,
+    function(req, res, next) {
+      var project = {
+        name        : req.body.createproject.name || '',
+        description : req.body.creategroup.description || ''
+      };
+      project.name = project.name.trim();
+      db.project.create(project)
+      .then(function(result) {   
+        req.user.addProject(result);
+        res.send({ status : 0 });
+      })
+      .catch(db.validationHandler(req, res, next));
+    }
+  );
+
 router.route('/').get(authzCheck);
 
 router.route(['/', '/:username'])

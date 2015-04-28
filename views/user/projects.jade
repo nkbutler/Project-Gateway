@@ -1,0 +1,62 @@
+extends ../mainLayout
+block head
+  script(type='text/javascript', src='/static/js/ajaxform.js')
+  script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
+block content
+  .container
+    .col-md-3
+      h3 #{page.user.username}
+      hr
+      ul.nav.nav-pills.nav-stacked
+        li: a(href='/user/' + page.user.username) Profile
+        li.active: a(href='/user/' + page.user.username + '/groups') Groups
+        li: a(href='/user/' + page.user.username + '/projects') Projects
+    .col-md-9
+      block userContent
+        if session && session.user && session.user.username === page.user.username
+          h1 Your Projects
+          hr
+          a.btn.btn-default(href='/user/projects/add') Create a project
+          br
+        else
+          h1 #{page.user.username}'s Projects
+          hr
+        br
+        if projects
+          .panel.panel-default
+            table.table
+              tr
+                th Name
+                th Description
+                th Members
+                th Joined
+                th &nbsp;
+              each project in projects
+                tr
+                  td: a(href='/project/' + project.id + '-' + project.name) #{project.name}
+                  td #{project.description}
+                  td #{project.members}
+                  td #{project.joined}
+                  td &nbsp;
+          if addprojects
+            if addprojects.length > 0
+              form#addproject.form-inline
+                .form-group
+                  label.hidden-xs(for='project') Add User to Project &nbsp;
+                  select.form-control(name='project')
+                    each group in addprojects
+                      option(value=project.id) #{project.name}
+                button.btn.btn-default(type='submit') Add
+              script(type='text/javascript').
+                $('document').ready(function(){
+                  forms.addproject.onSuccess(function(res) {
+                    if (res.status === 0) {
+                      window.location.reload();
+                    }
+                  });
+                });
+            else
+              p #{page.user.username} is already a member of all of your projects.
+
+        else
+          p #{page.user.username} is not a member of any projects yet.

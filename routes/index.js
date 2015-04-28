@@ -21,7 +21,9 @@ var doRegister = function(req, res, next) {
     username  : req.body.register.username,
     email     : req.body.register.email,
     password  : req.body.register.password,
-    password2 : req.body.register.password2
+    password2 : req.body.register.password2,
+    bio       : req.body.register.bio,
+    industry  : req.body.register.industry
   };
 
   db.user.create(user)

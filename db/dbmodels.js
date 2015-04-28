@@ -44,7 +44,9 @@ module.exports = {
       email       : { type : Sequelize.STRING, unique: true, allowNull: false },
       phone       : { type : Sequelize.STRING },
       password    : { type : Sequelize.STRING },
-      password2   : { type : Sequelize.VIRTUAL }
+      password2   : { type : Sequelize.VIRTUAL },
+      industry    : { type : Sequelize.STRING },
+      bio         : { type : Sequelize.STRING },
     },
     validations : {
       username    : { unique : validators.unique('username', 'Username already in use.') },
