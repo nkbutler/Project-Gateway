@@ -1,64 +1,112 @@
 var express = require('express'),
     db      = require('../db'),
-    auth    = require('../auth');
+    auth    = require('../auth'),
+    moment  = require('moment');
 var router = express.Router();
 
 router.param('id', db.param(db.group, 'id'));
-
-router.route('/:id')
-  .all(function(req, res, next) {
-    res.ctx.add({
-      forms : {
-	adduser : {
-	  errors : {},
-	  data : {}
-	},
-        createproject : {
-          errors : {},
-	  data : {}
-	}
-      },
-      session : {
-        // group : req.group
-      },
-      page : req.page
-    });
-    next();
-  })
-  .get(function(req, res, next) {
-    res.render('group', res.ctx);
-  })
-  /*
-  .post(function(req, res, next) {
-    var error = false;
-    var user = {
-      targetuser : req.body.username
-    };
-
-    if (error) {
-      next('route');
-    } else {
-      db.user.get(req.body.username, function(err, result) {
-        if (!err) {
-          members.group = group.members || [];
-            group.members.push(username);
-            db.group.save(group);
-            res.redirect('/groups/' + req.page.id - '-' + req.page.name);
-        } else {
-          next(new Error('Error adding user'));
+/* PAGE PROPERTIES:
+ * auth           User is logged in
+ * group_other    Viewing other group's page
+ * group_own      Viewing own group page
+ */
+router.use('/:id?\*', function(req, res, next) {
+  // Bind properties for parameter routes.
+  console.log('bind param props');
+  if (!req.page.group) {
+    res.sendStatus(404);
+    return;
+  }
+  req.page.group.getUsers().then(function(members) {
+    if (req.page.props.auth) {
+      req.page.props.group_other = true;
+      req.page.props.group_own = false;
+      for (var i in members) {
+        if (members[i].id === req.user.id) {
+          req.page.props.group_own = true;
+          req.page.props.group_other = false;
+          break;
         }
-      });
+      }
     }
-  })
-  */
-  .post(function(req, res, next) {
-    var project = {
-      name        : req.body.name,
-      description : req.body.description
-    };
-    db.project.create(group)
-    .then(function(result) { res.redirect('/projects/' + result.id + '-' + result.name); })
-    .catch(db.validationHandler(req, res, next));
+    res.ctx.add({
+      page : {
+        user    : req.user,
+        group   : req.page.group,
+        members : members,
+        props   : req.page.props
+      }
+    });
+    next('route');
   });
+});
 
+router.use('/:id/', require('./group/home'));
+router.use('/:id/members', require('./group/members'));
+
+//TODO: Convert the rest of this.
+/*
+router.route(['/projects', '/:name/projects'])
+  .get(
+    authzCheck,
+    buildContext,
+    function(req, res, next) {
+      res.render('group/projects', res.ctx);
+    }
+  );
+
+router.route('/groups/add')
+  .get(
+    authzCheck,
+    buildContext,
+    function(req, res, next) {
+      res.render('user/createGroup', res.ctx);
+    }
+  )
+  .post(
+    ajaxAuth,
+    function(req, res, next) {
+      var group = {
+        name        : req.body.creategroup.name || '',
+        slogan      : req.body.creategroup.slogan || '',
+        description : req.body.creategroup.description || ''
+      };
+      group.name = group.name.trim();
+      db.group.create(group)
+      .then(function(result) {
+        req.user.addGroup(result);
+        res.send({ status : 0 });
+      })
+      .catch(db.validationHandler(req, res, next));
+    }
+  );
+
+router.route('/projects/add')
+  .get(
+    authzCheck,
+    buildContext,
+    function(req, res, next) {
+      res.render('group/createProject', res.ctx);
+    }
+  )
+  .post(
+    ajaxAuth,
+    function(req, res, next) {
+      var project = {
+        name        : req.body.createproject.name || '',
+        description : req.body.creategroup.description || ''
+      };
+      project.name = project.name.trim();
+      db.project.create(project)
+      .then(function(result) {
+        req.group.addProject(result);
+        res.send({ status : 0 });
+      })
+      .catch(db.validationHandler(req, res, next));
+    }
+  );
+
+// NEEDS LOGIC HERE TO GIVE DIFFERENT VIEW IF USER IS NOT A MEMBER OF THE GROUP. MAYBE ONLY SEE THE ABOUT PAGE NOT MEMBERS OR PROJECTS.
+
+*/
 module.exports = router;

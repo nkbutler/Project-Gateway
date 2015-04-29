@@ -1,4 +1,5 @@
-var Sequelize = require('sequelize');
+var Sequelize = require('sequelize'),
+    moment    = require('moment');
 
 // validation helpers
 var validators = {
@@ -23,7 +24,6 @@ var validators = {
 var methods = {
   formatResult : function(formatter) {
     return function(next) {
-      // return a list of all usernames, firstnames, lastnames
       this.findAll().then(function(data) {
         var result = [];
         for (i in data) {
@@ -33,6 +33,29 @@ var methods = {
         next(result);
       });
     }
+  },
+  formatDates : function(formatter) {
+    formatter = formatter || function(date) { return moment(date).format('MMMM Do YYYY'); };
+    return function(data) {
+      var result = [];
+      for (var i in data) {
+        var obj = {};
+        if (typeof data[i].toJSON === 'function') {
+          row = data[i].toJSON();
+        } else {
+          row = data[i];
+        }
+        for (var j in row) {
+          if (row[j] && row[j].constructor === Date) {
+            obj[j] = formatter(row[j]);
+          } else {
+            obj[j] = row[j];
+          }
+        }
+        result.push(obj);
+      }
+      return result;
+    };
   },
 };
 
@@ -44,7 +67,9 @@ module.exports = {
       email       : { type : Sequelize.STRING, unique: true, allowNull: false },
       phone       : { type : Sequelize.STRING },
       password    : { type : Sequelize.STRING },
-      password2   : { type : Sequelize.VIRTUAL }
+      password2   : { type : Sequelize.VIRTUAL },
+      industry    : { type : Sequelize.STRING },
+      bio         : { type : Sequelize.STRING },
     },
     validations : {
       username    : { unique : validators.unique('username', 'Username already in use.') },
@@ -84,7 +109,12 @@ module.exports = {
     relations : [function() {
       this.Group.belongsToMany(this.User, { through : this.Members });
       this.User.belongsToMany(this.Group, { through : this.Members });
-    }]
+    }],
+    options : {
+      classMethods : {
+        formatDates : methods.formatDates(function(date){ return moment(date).fromNow() }),
+      },
+    }
   },
   Members : {
     schema : {

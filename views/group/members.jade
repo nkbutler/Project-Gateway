@@ -1,0 +1,37 @@
+extends home
+block append head
+  script(type='text/javascript', src='/static/js/ajaxform.js')
+  script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
+
+block groupNav
+  - var urlBase = '/group/' + page.group.id + '-' + page.group.name;
+  li: a(href=urlBase) About
+  li.active: a(href=urlBase + '/members') Members
+  li: a(href=urlBase + '/projects') Projects
+
+block groupContent
+  // /*
+    // if session && session.user && session.user.username
+    // TODO: fix this
+      h1 Your Groups
+      hr
+      a.btn.btn-default(href='/user/groups/add') Create a group
+      br
+    else
+    h1 #{page.group.name} Members
+    hr
+  // */
+  br
+  if users
+    .panel.panel-default
+      table.table
+        tr
+          th Username
+          th Joined
+          th &nbsp;
+        each user in users
+          tr
+            td: a(href='/user/' + user.username) #{user.username}
+            td #{user.joined}
+            td &nbsp;
+

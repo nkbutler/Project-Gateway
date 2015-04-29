@@ -73,7 +73,15 @@ app.use(session({
 auth.init(app);
 
 app.use(function(req, res, next) {
-  res.ctx = new Context({page : {}});
+  req.db = db;
+  res.ctx = new Context({
+    page : {},
+    session : { user : req.user }
+  });
+  req.page = req.page || {};
+  req.page.props = {};
+  if (req.user && typeof req.user.id === 'number') { req.page.props.auth = true; }
+
   next();
 });
 // routers

@@ -21,7 +21,7 @@ db.prototype.param = function(model, paramName, onSuccess, onError) {
         req.page[model.name.toLowerCase()] = data;
         next();
       } else {
-        next(new Error("Page not found"));
+        next('route');
       }
     })
     .catch(function(ex) { next(ex); });

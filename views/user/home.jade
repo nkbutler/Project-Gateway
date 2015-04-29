@@ -2,14 +2,20 @@ extends ../mainLayout
 //User Home
 block content
   .container
-    .col-md-3
+    .col-md-3.well
       h3 #{page.user.username}
       hr
       ul.nav.nav-pills.nav-stacked
-        li.active: a(href='/user/' + page.user.username) Profile
-        li: a(href='/user/' + page.user.username + '/groups') Groups
-        li: a(href='/user/' + page.user.username + '/projects') Projects
-    .col-md-9
+        block userNav
+          li.active: a(href='/user/' + page.user.username) Profile
+          li: a(href='/user/' + page.user.username + '/groups') Groups
+          li: a(href='/user/' + page.user.username + '/projects') Projects
+    .col-md-9.well
       block userContent
-        h1 Your Profile
+        if page.props.user_own
+          h1 Your Profile
+        else
+          h1 About #{page.user.username}
         hr
+        h4 #{page.user.industry}
+        h5 #{page.user.bio}
