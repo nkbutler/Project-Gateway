@@ -2,7 +2,7 @@ extends ../mainLayout
 //Group Home
 block content
   .container
-    .col-md-3
+    .col-md-3.well
       h3 #{page.group.name}
       hr
       ul.nav.nav-pills.nav-stacked
@@ -11,7 +11,7 @@ block content
           li.active: a(href=urlBase) About
           li: a(href=urlBase + '/members') Members
           li: a(href=urlBase + '/projects') Projects
-    .col-md-9
+    .col-md-9.well
       block groupContent
         h1 About
         hr

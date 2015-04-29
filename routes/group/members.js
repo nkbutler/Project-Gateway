@@ -12,7 +12,7 @@ router.route('/')
           row.joined = row.Members.joined;
           userdata.push(row);
         }
-        var users = group.Model.formatDates(data);
+        var users = group.Model.formatDates(userdata);
         res.ctx.add({
           users : users
         });

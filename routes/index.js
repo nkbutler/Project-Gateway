@@ -52,7 +52,7 @@ login.route('/')
         res.render('user/register', res.ctx);
       } else {
         // Render the login screen's template.
-        res.render('user/login', res.ctx);
+        res.render('index', res.ctx);
       }
     }
   )
@@ -81,15 +81,16 @@ login.route('/')
     }
   )
 
+/*
 router.route('/')
-.all(
+.get(
   function(req, res, next) {
     res.render('index', res.ctx);
   }
 );
+*/
 
-router.use('/login', login);
-router.use('/register', login);
+router.use(['/login', '/register', '/'], login);
 router.route('/logout')
   .get(
     auth.logout,

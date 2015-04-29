@@ -1,18 +1,40 @@
 extends baseLayout
+block head
+  link(rel='stylesheet', href='/static/css/style.css')
+  script(type='text/javascript', src='static/js/ajaxform.js')
+  script(type='text/javascript', src='static/js/ajaxform-bootstrap.js')
+  script(type='text/javascript').
+    $('document').ready(function() {
+      forms.login.onSuccess(function(res){
+        if (res.status === 0) {
+          location.assign('/user');
+        }
+      })
+    });
 block body
-  br
-  br
-  .container
-    .row
-      center
-        br
-        img.img-responsive(src='static/img/gateway-logo.png')
-        strong WELCOME
-    .row
-      br
-      .well.col-md-4.col-md-offset-4
-         center
-            a(href='/login') Sign In
-    .row
-      center
-        img.img-responsive(src='static/img/software-development-telemarketing.png')
+  .jumbotron#index-welcome
+    img.img-responsive.center-block(src='static/img/gateway-logo.png')
+    br
+    br
+    .container
+      .row
+        .col-sm-4.col-sm-offset-4
+          .panel.panel-default.text-center
+            .panel-heading
+              strong WELCOME
+            .panel-body
+              h2 Sign In
+              hr
+              form#login(action='/login')
+                .form-group
+                  label.hidden-xs(for='username')
+                    span.glyphicon.glyphicon-user &nbsp;
+                    span Username or Email
+                  input.form-control#username(type='text', name='username', placeholder='Username or Email')
+                .form-group
+                  label.hidden-xs(for='password') Password
+                  input.form-control#password(type='password', name='password', placeholder='Password')
+                .form-group
+                  button.btn.btn-default.btn-xs.btn-block Sign in
+            .panel-footer
+              a(href='/register') Create an account

@@ -2,7 +2,7 @@ extends ../mainLayout
 //User Home
 block content
   .container
-    .col-md-3
+    .col-md-3.well
       h3 #{page.user.username}
       hr
       ul.nav.nav-pills.nav-stacked
@@ -10,7 +10,7 @@ block content
           li.active: a(href='/user/' + page.user.username) Profile
           li: a(href='/user/' + page.user.username + '/groups') Groups
           li: a(href='/user/' + page.user.username + '/projects') Projects
-    .col-md-9
+    .col-md-9.well
       block userContent
         if page.props.user_own
           h1 Your Profile

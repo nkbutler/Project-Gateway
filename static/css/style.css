@@ -1,8 +1,6 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
+#index-welcome {
+  background-image: url('/static/img/software-development-telemarketing.png');
+  background-size: cover;
+  padding: 6%;
+  margin: 0px;
 }
