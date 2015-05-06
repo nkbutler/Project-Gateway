@@ -10,7 +10,7 @@ router.route('/')
         for (i in data) {
           var row = data[i].toJSON();
           row.joined = row.ProjectGroup.joined;
-          userdata.push(row);
+          projectdata.push(row);
         }
         var projects = group.Model.formatDates(data);
         res.ctx.add({
