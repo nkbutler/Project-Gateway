@@ -10,8 +10,8 @@ block content
         li: a(href='/project/' + page.project.id + '-' + page.project.name + '/members') Member Groups
         li: a(href='/project/' + page.project.id + '-' + page.project.name + '/tasks') To Do
         li: a(href='/project/' + page.project.id + '-' + page.project.name + '/events') Events
-    .col-md-9.well
+    .col-md-9
       block projectContent
-        h1 About
+        h1 About #{page.project.name}
         hr
-        h4 #{page.project.description}
+        h5 #{page.project.description}

@@ -39,14 +39,38 @@ router.use('/:id?\*', function(req, res, next) {
     });
     next('route');
   });
+  req.page.group.getProjects().then(function(projectgroup) {
+    if (req.page.props.auth) {
+      req.page.props.group_other = true;
+      req.page.props.group_own = false;
+      for (var i in projectgroup) {
+        if (projectgroup[i].id === req.project.id) {
+          req.page.props.group_own = true;
+          req.page.props.group_other = false;
+          break;
+        }
+      }
+    }
+    res.ctx.add({
+      page : {
+        project    : req.project,
+        group   : req.page.group,
+        projectgroup : projectgroup,
+        props   : req.page.props
+      }
+    });
+    next('route');
+  });
 });
 
 router.use('/:id/', require('./group/home'));
 router.use('/:id/members', require('./group/members'));
+router.use('/:id/projects', require('./group/projects'));
+router.use('/projects/add', require('./group/addProject'));
 
 //TODO: Convert the rest of this.
 /*
-router.route(['/projects', '/:name/projects'])
+router.route(['/projects', '/:id/projects'])
   .get(
     authzCheck,
     buildContext,
