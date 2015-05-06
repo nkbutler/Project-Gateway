@@ -129,9 +129,14 @@ module.exports = {
       created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
     },
     relations : [function() {
-      this.Group.belongsToMany(this.Project, { through : 'ProjectGroup' });
-      this.Project.belongsToMany(this.Group, { through : 'ProjectGroup' });
+      this.Group.belongsToMany(this.Project, { through : this.ProjectGroup });
+      this.Project.belongsToMany(this.Group, { through : this.ProjectGroup });
     }]
+  },
+  ProjectGroup : {
+    schema : {
+      joined      : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+    },
   },
   Task : {
     schema : {

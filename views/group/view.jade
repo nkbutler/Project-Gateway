@@ -1,17 +1,17 @@
 extends ../mainLayout
-//User Home
+//Group Home
 block content
   .container
     .col-md-3
-      h3 #{page.user.username}
+      h3 #{page.group.name}
       hr
       ul.nav.nav-pills.nav-stacked
-        li.active: a(href='/user/' + page.user.username) Profile
-        li: a(href='/user/' + page.user.username + '/groups') Groups
-        li: a(href='/user/' + page.user.username + '/projects') Projects
+        li.active: a(href='/group/' + page.group.id + '-' + page.group.name) About
+        li: a(href='/group/' + page.group.id + '-' + page.group.name + '/members') Members
+        li: a(href='/group/' + page.group.id + '-' + page.group.name + '/projects') Projects
     .col-md-9
       block userContent
-        h1 About #{page.user.username}
+        h1 About #{page.group.name}
         hr
-        h4 #{page.user.industry}
-        h5 #{page.user.bio}
+        h4 #{page.group.motto}
+        h5 #{page.group.description}
