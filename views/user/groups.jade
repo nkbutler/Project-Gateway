@@ -4,9 +4,9 @@ block append head
   script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
 
 block userNav
-        li: a(href='/user/' + page.user.username) Profile
-        li.active: a(href='/user/' + page.user.username + '/groups') Groups
-        li: a(href='/user/' + page.user.username + '/projects') Projects
+  li: a(href='/user/' + page.user.username) Profile
+  li.active: a(href='/user/' + page.user.username + '/groups') Groups
+  li: a(href='/user/' + page.user.username + '/projects') Projects
 
 block userContent
   if page.props.user_own
