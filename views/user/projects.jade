@@ -9,7 +9,6 @@ block userContent
   if session && session.user && session.user.username === page.user.username
     h1 Your Projects
     hr
-    a.btn.btn-default(href='/user/projects/add') Create a project
     br
   else
     h1 #{page.user.username}'s Projects
