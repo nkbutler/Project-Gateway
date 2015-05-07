@@ -10,18 +10,7 @@ block projectNav
   li: a(href=urlBase + '/tasks') To Do
   li: a(href=urlBase + '/events') Events
 
-block groupContent
-  // /*
-    // if session && session.user && session.user.username
-    // TODO: fix this
-      h1 Your Groups
-      hr
-      a.btn.btn-default(href='/user/groups/add') Create a group
-      br
-    else
-    h1 #{page.group.name} Members
-    hr
-  // */
+block projectContent
   br
   if groups
     .panel.panel-default
@@ -32,7 +21,7 @@ block groupContent
           th &nbsp;
         each group in groups
           tr
-            td: a(href='/group/' + group.name) #{group.name}
+            td: a(href='/group/' + group.id + '-' + group.name) #{group.name}
             td #{group.joined}
             td &nbsp;
 

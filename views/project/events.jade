@@ -4,10 +4,11 @@ block append head
   script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
 
 block groupNav
-  - var urlBase = '/group/' + page.group.id + '-' + page.group.name;
+  - var urlBase = '/project/' + page.project.id + '-' + page.project.name;
   li: a(href=urlBase) About
-  li.active: a(href=urlBase + '/members') Members
-  li: a(href=urlBase + '/projects') Projects
+  li: a(href=urlBase + '/members') Group Members
+  li: a(href=urlBase + '/tasks') Tasks
+  li.active: a(href=urlBase + '/events') Events
 
 /*
 extends ../mainLayout
@@ -19,44 +20,42 @@ block head
 block content
   .container
     .col-md-3
-      h3 #{page.group.name}
+      h3 #{page.project.name}
       hr
       ul.nav.nav-pills.nav-stacked
-        li: a(href='/group/' + page.group.id + '-' + page.group.name) About
-        li: a(href='/group/' + page.group.id + '-' + page.group.name + '/members') Members
-        li.active: a(href='/group/' + page.group.id + '-' + page.group.name + '/projects') Projects
+        li: a(href='/project/' + page.project.id + '-' + page.project.name) About
+        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/members') Group Members
+        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/tasks') Tasks
+        li.active: a(href='/project/' + page.project.id + '-' + page.project.name + '/events') Events
     .col-md-9
       block userContent
-        if session && session.user && session.user.username === page.user.username
-          h1 Your Projects
-          hr
-          a.btn.btn-default(href='/group/' + page.group.id + '-' + page.group.name + '/projects/add') Create a project
-          br
-        else
-          h1 #{page.group.name}'s Projects
-          hr
+
+        // if session && session.user && session.user.username === page.user.username
+        h1 Your Events
+        hr
+        a.btn.btn-default(href='/project/' + page.project.id + '-' + page.project.name + '/events/add') Create an event
         br
-        if projects
+      if events
           .panel.panel-default
             table.table
               tr
                 th Name
                 th Description
-                th Member Groups
-                th Joined
+                th Date
+                th Location
                 th &nbsp;
-              each project in projects
+              each task in tasks
                 tr
-                  td: a(href='/project/' + project.id + '-' + project.name) #{project.name}
-                  td #{project.description}
-                  td #{project.members}
-                  td #{project.joined}
+                  td: a(href='/project/events/' + event.id + '-' + event.name) #{event.name}
+                  td #{task.description}
+                  td #{task.date}
+                  td #{task.location}
                   td &nbsp;
-          if addprojects
-            if addprojects.length > 0
-              form#addproject.form-inline
+          if addtasks
+            if addtasks.length > 0
+              form#addtask.form-inline
                 .form-group
-                  label.hidden-xs(for='project') Add Group to Project &nbsp;
+                  label.hidden-xs(for='task') Add Task to Project &nbsp;
                   select.form-control(name='project')
                     each group in addprojects
                       option(value=project.id) #{project.name}
