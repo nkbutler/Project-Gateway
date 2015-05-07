@@ -2,14 +2,16 @@ extends ../mainLayout
 //Project Home
 block content
   .container
-    .col-md-3
+    .col-md-3.well
       h3 #{page.project.name}
       hr
       ul.nav.nav-pills.nav-stacked
-        li.active: a(href='/project/' + page.project.id + '-' + page.project.name) About
-        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/members') Member Groups
-        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/tasks') To Do
-        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/events') Events
+        block projectNav
+          - var urlBase = '/project/' + page.project.id + '-' + page.project.name;
+          li.active: a(href=urlBase) About
+          li: a(href=urlBase + '/members') Group Members
+          li: a(href=urlBase + '/tasks') To Do
+          li: a(href=urlBase + '/events') Events
     .col-md-9.well
       block projectContent
         h1 About

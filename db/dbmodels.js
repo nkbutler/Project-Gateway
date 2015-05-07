@@ -131,7 +131,12 @@ module.exports = {
     relations : [function() {
       this.Group.belongsToMany(this.Project, { through : this.ProjectGroup });
       this.Project.belongsToMany(this.Group, { through : this.ProjectGroup });
-    }]
+    }],
+    options : {
+      classMethods : {
+        formatDates : methods.formatDates(function(date){ return moment(date).fromNow() }),
+      },
+    }
   },
   ProjectGroup : {
     schema : {
@@ -142,8 +147,24 @@ module.exports = {
     schema : {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
       name        : { type : Sequelize.STRING },
-      description : { type : Sequelize.STRING }
-    }
+      due         : { type : Sequelize.STRING },
+      description : { type : Sequelize.STRING },
+      created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+    },
+    relations : [function() {
+      this.Project.belongsToMany(this.Task, { through : this.ProjectTask });
+      this.Task.belongsToMany(this.Project, { through : this.ProjectTask });
+    }]
+  },
+  ProjectTask : {
+    schema : {
+      joined      : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+    },   
+  },
+  ProjectEvent : {
+    schema : {
+      joined      : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+    },   
   },
   Event : {
     schema : {
@@ -152,6 +173,10 @@ module.exports = {
       description : { type : Sequelize.STRING },
       date        : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
       location    : { type : Sequelize.STRING }
-    }
+    },
+    relations : [function() {
+      this.Project.belongsToMany(this.Event, { through : this.ProjectEvent });
+      this.Event.belongsToMany(this.Project, { through : this.ProjectEvent });
+    }]
   },
 };

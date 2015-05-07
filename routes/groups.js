@@ -66,7 +66,7 @@ router.use('/:id?\*', function(req, res, next) {
 router.use('/:id/', require('./group/home'));
 router.use('/:id/members', require('./group/members'));
 router.use('/:id/projects', require('./group/projects'));
-router.use('/projects/add', require('./group/addProject'));
+router.use('/:id/projects/add', require('./group/addProject'));
 
 //TODO: Convert the rest of this.
 /*
