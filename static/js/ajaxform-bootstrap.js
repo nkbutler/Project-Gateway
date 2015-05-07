@@ -24,6 +24,9 @@
         if (fieldName == '_csrf' || fieldObj.field.attr('type') == 'checkbox') {
           return;
         }
+        if (fieldObj.parent.hasClass('input-group')) {
+          fieldObj.parent = fieldObj.parent.parent();
+        }
         fieldObj.onSuccess(function(){
           this.clear();
           this.parent.addClass('has-success has-feedback');
@@ -49,14 +52,22 @@
       });
       formObj.onSuccess(function(res) {
         if (res.status == 1) {
-          $.each(this.fields, function(name, fieldObj){
+          $.each(this.fields, function(name, fieldObj) {
             if (res.errors[name]) {
               fieldObj.error(res.errors[name]);
               if (fieldObj.field.attr('type') == 'password') {
                 fieldObj.field.val('');
               }
+              res.errors[name] = undefined;
             } else {
               fieldObj.success();
+            }
+          });
+          $.each(res.errors, function(name, error) {
+            console.log(name, error);
+            if (error !== undefined) {
+              console.log('blah');
+              formObj.form.append(createAlert(error));
             }
           });
         } else {

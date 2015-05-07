@@ -135,6 +135,8 @@ module.exports = {
     relations : [function() {
       this.Group.belongsToMany(this.Project, { through : this.ProjectGroup });
       this.Project.belongsToMany(this.Group, { through : this.ProjectGroup });
+      this.Project.hasMany(this.Event);
+      this.Project.hasMany(this.Task);
     }],
     options : {
       classMethods : {
@@ -151,37 +153,23 @@ module.exports = {
     schema : {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
       name        : { type : Sequelize.STRING },
-      due         : { type : Sequelize.STRING },
-      description : { type : Sequelize.STRING },
-      created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+      due         : { type : Sequelize.DATE,
+        set       : function(v) { this.setDataValue('due', new Date(v)); },
+        get       : function(v) { return moment(this.getDataValue('due')).format('MMMM Do YYYY, h:mm:ss a'); }
+      },
+      description : { type : Sequelize.STRING }
     },
-    relations : [function() {
-      this.Project.belongsToMany(this.Task, { through : this.ProjectTask });
-      this.Task.belongsToMany(this.Project, { through : this.ProjectTask });
-    }]
-  },
-  ProjectTask : {
-    schema : {
-      joined      : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
-    },   
-  },
-  ProjectEvent : {
-    schema : {
-      joined      : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
-    },   
   },
   Event : {
     schema : {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
       name        : { type : Sequelize.STRING },
       description : { type : Sequelize.STRING },
-      date        : { type : Sequelize.STRING },
-      location    : { type : Sequelize.STRING },
-      created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
+      date         : { type : Sequelize.DATE,
+        set       : function(v) { this.setDataValue('date', new Date(v)); },
+        get       : function(v) { return moment(this.getDataValue('date')).format('MMMM Do YYYY, h:mm:ss a'); }
+      },
+      location    : { type : Sequelize.STRING }
     },
-    relations : [function() {
-      this.Project.belongsToMany(this.Event, { through : this.ProjectEvent });
-      this.Event.belongsToMany(this.Project, { through : this.ProjectEvent });
-    }]
   },
 };

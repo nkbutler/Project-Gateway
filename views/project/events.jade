@@ -1,75 +1,32 @@
 extends home
-block append head
-  script(type='text/javascript', src='/static/js/ajaxform.js')
-  script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
 
-block groupNav
+block projectNav
   - var urlBase = '/project/' + page.project.id + '-' + page.project.name;
   li: a(href=urlBase) About
   li: a(href=urlBase + '/members') Group Members
   li: a(href=urlBase + '/tasks') Tasks
   li.active: a(href=urlBase + '/events') Events
 
-/*
-extends ../mainLayout
-block head
-  script(type='text/javascript', src='/static/js/ajaxform.js')
-  script(type='text/javascript', src='/static/js/ajaxform-bootstrap.js')
-*/
-
-block content
-  .container
-    .col-md-3
-      h3 #{page.project.name}
-      hr
-      ul.nav.nav-pills.nav-stacked
-        li: a(href='/project/' + page.project.id + '-' + page.project.name) About
-        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/members') Group Members
-        li: a(href='/project/' + page.project.id + '-' + page.project.name + '/tasks') Tasks
-        li.active: a(href='/project/' + page.project.id + '-' + page.project.name + '/events') Events
-    .col-md-9
-      block userContent
-
-        // if session && session.user && session.user.username === page.user.username
-        h1 Your Events
-        hr
-        a.btn.btn-default(href='/project/' + page.project.id + '-' + page.project.name + '/events/add') Create an event
-        br
-      if events
-          .panel.panel-default
-            table.table
-              tr
-                th Name
-                th Description
-                th Date
-                th Location
-                th &nbsp;
-              each event in events
-                tr
-                  td: a(href='/event/' + event.id + '-' + event.name) #{event.name}
-                  td #{task.description}
-                  td #{task.date}
-                  td #{task.location}
-                  td &nbsp;
-          if addtasks
-            if addtasks.length > 0
-              form#addtask.form-inline
-                .form-group
-                  label.hidden-xs(for='task') Add Task to Project &nbsp;
-                  select.form-control(name='project')
-                    each group in addprojects
-                      option(value=project.id) #{project.name}
-                button.btn.btn-default(type='submit') Add
-              script(type='text/javascript').
-                $('document').ready(function(){
-                  forms.addproject.onSuccess(function(res) {
-                    if (res.status === 0) {
-                      window.location.reload();
-                    }
-                  });
-                });
-            else
-              p #{page.group.name} is already a member of all of your projects.
-
-        else
-          p #{page.group.name} is not a member of any projects yet.
+block projectContent
+  h1 #{page.project.name}'s Events
+  hr
+  if events && events.length > 0
+    .panel.panel-default
+      table.table
+        tr
+          th Name
+          th Description
+          th Date
+          th Location
+          th &nbsp;
+        each event in events
+          tr
+            td: a(href=urlBase + '/events/' + event.id + '-' + event.name) #{event.name}
+            td #{event.description}
+            td #{event.date}
+            td #{event.location}
+            td &nbsp;
+  else
+    p #{page.project.name} has not added any events yet.
+  if page.props.project_own
+    a.btn.btn-default(href=urlBase + '/events/new') Create an event

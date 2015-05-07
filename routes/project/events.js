@@ -1,31 +1,25 @@
-var express = require('express');
+var express = require('express'),
+    db      = require('../../db');
 var router = express.Router();
 
-router.route('/')
-  .get(
-    function(req, res, next) {
-      var project = res.ctx.page.project;
-      project.getEvents().then(function(data) {
-        var eventdata = [];
-        for (i in data) {
-          var row = data[i].toJSON();
-          row.joined = row.ProjectEvent.joined;
-          eventdata.push(row);
-        }
-        var events = project.Model.formatDates(data);
-        res.ctx.add({
-          events : events
-        });
-        next('route');
-      });
+router.param('id', db.param(db.event, 'id'));
+router.use('/:id-\*', function(req, res, next) {
+  // Bind properties for parameter routes.
+  console.log('bind event param props');
+  if (!req.page.event) {
+    res.sendStatus(404);
+    return;
+  }
+  res.ctx.add({
+    page : {
+      event : req.page.event
     }
-  )
-
-
-router.route('/')
-.get(function(req, res, next) {
-  res.render('project/events', res.ctx);
+  });
+  next('route');
 });
 
+router.use('/new', require('./event/add'));
+router.use('/:id-\*', require('./event/view'));
+router.use('/', require('./event/list'));
 
 module.exports = router;

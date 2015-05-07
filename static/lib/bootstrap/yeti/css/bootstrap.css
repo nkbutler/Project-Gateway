@@ -3050,7 +3050,7 @@ fieldset[disabled] .btn {
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
   color: #333333;
-  background-color: #ffcccc;
+  background-color: #e6e6e6;
   border-color: #adadad;
 }
 .btn-default:active,
@@ -3889,7 +3889,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: #eeeeee;
+  background-color: #ffffff;
 }
 .nav > li.disabled > a {
   color: #999999;
@@ -3904,7 +3904,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: #eeeeee;
+  background-color: #ffffff;
   border-color: #1097c4;
 }
 .nav .nav-divider {
@@ -3936,7 +3936,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   color: #6f6f6f;
-  background-color: #c8e7f1;
+  background-color: #ffffff;
   border: 1px solid #dddddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -6645,10 +6645,14 @@ button.close {
   color: #333333;
   border-color: #cccccc;
 }
+.btn.btn-default:active {
+  color: #000000;
+  background-color: #ffffff;
+}
 .btn.btn-default:hover {
   color: #000000;
   background-color: #ffffff;
-  border-color: #ff9999;
+  border-color: #999999;
 }
 .btn.btn-primary {
   color: #ffffff;
@@ -6699,7 +6703,7 @@ button.close {
   color: #333333;
 }
 .btn-group .dropdown-toggle.btn-default ~ .dropdown-menu > li > a:hover {
-  background-color: #ffd6d6;
+  background-color: #ebebeb;
 }
 .btn-group .dropdown-toggle.btn-primary ~ .dropdown-menu {
   background-color: #32c0ee;

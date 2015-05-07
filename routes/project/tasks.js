@@ -1,31 +1,26 @@
-var express = require('express');
+var express = require('express'),
+    db      = require('../../db');
 var router = express.Router();
 
-router.route('/')
-  .get(
-    function(req, res, next) {
-      var project = res.ctx.page.project;
-      project.getTasks().then(function(data) {
-        var taskdata = [];
-        for (i in data) {
-          var row = data[i].toJSON();
-          row.joined = row.ProjectTask.joined;
-          taskdata.push(row);
-        }
-        var tasks = project.Model.formatDates(data);
-        res.ctx.add({
-          tasks : tasks
-        });
-        next('route');
-      });
+router.param('id', db.param(db.task, 'id'));
+router.use('/:id-\*', function(req, res, next) {
+  // Bind properties for parameter routes.
+  console.log('bind task param props');
+  if (!req.page.task) {
+    res.sendStatus(404);
+    return;
+  }
+  res.ctx.add({
+    page : {
+      task : req.page.task
     }
-  )
-
-
-router.route('/')
-.get(function(req, res, next) {
-  res.render('project/tasks', res.ctx);
+  });
+  next('route');
 });
 
+
+router.use('/new', require('./task/add'));
+router.use('/:id-\*', require('./task/view'));
+router.use('/', require('./task/list'));
 
 module.exports = router;

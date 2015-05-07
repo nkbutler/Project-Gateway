@@ -17,7 +17,7 @@ router.route('/')
       task.name = task.name.trim();
       db.task.create(task)
       .then(function(result) {
-        req.project.addTask(result);
+        req.page.project.addTask(result);
         res.send({ status : 0 });
       })
       .catch(db.validationHandler(req, res, next));

@@ -10,10 +10,10 @@ block content
           - var urlBase = '/project/' + page.project.id + '-' + page.project.name;
           li.active: a(href=urlBase) About
           li: a(href=urlBase + '/members') Group Members
-          li: a(href=urlBase + '/tasks') To Do
+          li: a(href=urlBase + '/tasks') Tasks
           li: a(href=urlBase + '/events') Events
     .col-md-9.well
       block projectContent
-        h1 About
+        h1 About #{page.project.name}
         hr
-        h4 #{page.project.description}
+        h5 #{page.project.description}

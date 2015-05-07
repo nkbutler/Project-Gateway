@@ -46,6 +46,10 @@
   Field.prototype = Object.create(DOMObj.prototype);
   Field.prototype.constructor = Field;
 
+  Field.prototype.getVal = function() {
+    return this.field.val();
+  };
+
   var AjaxField = function(field) {
     Field.call(this, field);
     this.src  = this.field.attr('src') || '';
@@ -118,7 +122,7 @@
       if (fieldObj.field.attr('type') == 'checkbox') {
         val = fieldObj.field.is(':checked') ? true : false;
       } else {
-        val = fieldObj.field.val();
+        val = fieldObj.getVal();
       }
       if (name == '_csrf') {
         obj[name] = val;

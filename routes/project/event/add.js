@@ -18,7 +18,7 @@ router.route('/')
       event.name = event.name.trim();
       db.event.create(event)
       .then(function(result) {
-        req.project.addEvent(result);
+        req.page.project.addEvent(result);
         res.send({ status : 0 });
       })
       .catch(db.validationHandler(req, res, next));

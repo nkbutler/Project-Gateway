@@ -16,7 +16,7 @@ router.route('/')
       project.name = project.name.trim();
       db.project.create(project)
       .then(function(result) {
-        req.group.addProject(result);
+        req.page.group.addProject(result);
         res.send({ status : 0 });
       })
       .catch(db.validationHandler(req, res, next));

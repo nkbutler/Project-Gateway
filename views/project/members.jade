@@ -11,7 +11,8 @@ block projectNav
   li: a(href=urlBase + '/events') Events
 
 block projectContent
-  br
+  h1 #{page.project.name} Contributors
+  hr
   if groups
     .panel.panel-default
       table.table
@@ -24,4 +25,6 @@ block projectContent
             td: a(href='/group/' + group.id + '-' + group.name) #{group.name}
             td #{group.joined}
             td &nbsp;
+  else
+    p #{page.project.name} has no member groups.
 
