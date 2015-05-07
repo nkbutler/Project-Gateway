@@ -46,7 +46,7 @@ block content
                 th &nbsp;
               each task in tasks
                 tr
-                  td: a(href='/project/tasks/' + task.id + '-' + task.name) #{task.name}
+                  td: a(href='/project/' + page.project.id + '-' + page.project.name + '/tasks/' + task.id + '-' + task.name) #{task.name}
                   td #{task.description}
                   td #{task.joined}
                   td #{task.due}

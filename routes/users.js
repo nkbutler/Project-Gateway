@@ -68,5 +68,6 @@ router.use(['/groups', '/:username/groups'], require('./user/groups'));
 router.use('/groups/add', authCheck, require('./user/profile/addGroup'));
 router.use(['/:username', '/'], require('./user/home'));
 router.use('/api', require('./user/api'));
+router.use(['/projects', '/:username/projects'], require('./user/projects'));
 
 module.exports = router;

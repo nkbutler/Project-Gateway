@@ -7,7 +7,7 @@ var router = express.Router();
 router.param('id', db.param(db.project, 'id'));
 /* PAGE PROPERTIES:
  * auth           User is logged in
- * prokect_other    Viewing other project's page
+ * project_other    Viewing other project's page
  * project_own      Viewing own project page
  */
 router.use('/:id?\*', function(req, res, next) {

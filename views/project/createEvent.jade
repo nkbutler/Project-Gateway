@@ -14,21 +14,21 @@ block content
         li.active: a(href='/project/' + page.project.id + '-' + page.project.name + '/events') Events
     .col-md-9
       block projectContent
-        if session && session.user && session.user.username === page.user.username
-          h1 Create an Event
-          hr
-          form#createevent
-            .form-group
-              label.hidden-xs(for='name') Name for Event
-              input.form-control#name(type='text', name='name', placeholder='Enter a name for your event')
-            .form-group
-              label.hidden-xs(for='description') Description for Event
-              input.form-control#description(type='text', name='description', placeholder='Enter a short description of your event')
-            .form-group
-              label.hidden-xs(for='event') Date for Event  
-              input.form-control#event(type='text', name='event', placeholder='Enter the date of your event')
-            .form-group
-              label.hidden-xs(for='location') Location for Event  
-              input.form-control#location(type='text', name='location', placeholder='Enter the location of your event')
-            .form-group
-              button.btn.btn-default Create
+        // if session && session.user && session.user.username === page.user.username
+        h1 Create an Event
+        hr
+        form#createevent
+          .form-group
+            label.hidden-xs(for='name') Name for Event
+            input.form-control#name(type='text', name='name', placeholder='Enter a name for your event')
+          .form-group
+            label.hidden-xs(for='description') Description for Event
+            input.form-control#description(type='text', name='description', placeholder='Enter a short description of your event')
+          .form-group
+            label.hidden-xs(for='date') Date for Event  
+            input.form-control#date(type='text', name='date', placeholder='Enter the date of your event')
+          .form-group
+            label.hidden-xs(for='location') Location for Event  
+            input.form-control#location(type='text', name='location', placeholder='Enter the location of your event')
+          .form-group
+            button.btn.btn-default Create

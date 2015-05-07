@@ -44,7 +44,7 @@ block content
                 th Date
                 th Location
                 th &nbsp;
-              each task in tasks
+              each event in events
                 tr
                   td: a(href='/project/events/' + event.id + '-' + event.name) #{event.name}
                   td #{task.description}
