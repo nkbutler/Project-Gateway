@@ -72,5 +72,6 @@ router.use(['/projects', '/:username/projects'], require('./user/projects'));
 
 router.use(['/:username', '/'], require('./user/home'));
 router.use('/api', require('./user/api'));
+router.use(['/projects', '/:username/projects'], require('./user/projects'));
 
 module.exports = router;
