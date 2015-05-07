@@ -11,6 +11,7 @@ router.route('/')
     function(req, res, next) {
       var task = {
         name        : req.body.createtask.name || '',
+        due         : req.body.createtask.due || '',
         description : req.body.createtask.description || ''
       };
       task.name = task.name.trim();

@@ -1,0 +1,22 @@
+extends ../mainLayout
+//Event Home
+block content
+  .container
+    .col-md-3.well
+      h3 #{page.event.name}
+      hr
+      ul.nav.nav-pills.nav-stacked
+        block eventNav
+          - var urlBase = '/event/' + page.event.id + '-' + page.event.name;
+          li.active: a(href=urlBase) Description
+          li: a(href=urlBase + '/members') Attending
+          li: a(href=urlBase + '/agenda') Agenda
+          li: a(href=urlBase + '/comments') Comments
+    .col-md-9.well
+      block eventContent
+        h1 About
+        hr
+        h4 #{page.event.description}
+        br
+        h5 Date: #{page.event.date}
+        h5 Location: #{page.event.location}
