@@ -91,9 +91,13 @@ module.exports = {
         diffGroups : function(user) {
           var query = 'SELECT g.* FROM `Group` g INNER JOIN Members m ON g.id = m.GroupId WHERE m.UserId = ' + this.id + ' AND m.GroupId NOT IN (SELECT GroupId FROM `Members` WHERE UserId = ' + user.id + ');';
           return this.sequelize.query(query, this.sequelize.models.Group);
+        },
+        listProjects : function() {
+          var query = 'SELECT DISTINCT p.* FROM Project p INNER JOIN ProjectGroup pg ON pg.ProjectId = p.id INNER JOIN `Group` g ON pg.GroupId = g.id INNER JOIN Members m ON m.GroupId = g.id INNER JOIN User u ON u.id = m.UserId WHERE u.id = ' + this.id + ';'
+          return this.sequelize.query(query, this.sequelize.models.Project);
         }
-      }
-    },
+      },
+    }
   },
   Group : {
     schema : {

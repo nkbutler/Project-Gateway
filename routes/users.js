@@ -63,7 +63,7 @@ authCheck.route('')
     res.status(403).send({ status : 'NOT_AUTHORIZED' });
   });
 
-router.use(['/groups', '/', '/projects'], authCheck);
+router.use(['/groups', '/projects', '/'], authCheck);
 router.use(['/groups', '/:username/groups'], require('./user/groups'));
 router.use('/groups/add', authCheck, require('./user/profile/addGroup'));
 router.use(['/:username', '/'], require('./user/home'));
