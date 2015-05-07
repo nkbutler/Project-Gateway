@@ -51,9 +51,7 @@ var routes = {
   index    : require('./routes/index'),
   user     : require('./routes/users'),
   group    : require('./routes/groups'),
-  project  : require('./routes/projects'),
-  task     : require('./routes/tasks'),
-  event    : require('./routes/events')
+  project  : require('./routes/projects')
 };
 
 var app = express();
