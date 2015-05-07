@@ -51,7 +51,9 @@ var routes = {
   index    : require('./routes/index'),
   user     : require('./routes/users'),
   group    : require('./routes/groups'),
-  project  : require('./routes/projects')
+  project  : require('./routes/projects'),
+  task     : require('./routes/tasks'),
+  event    : require('./routes/events')
 };
 
 var app = express();
@@ -99,8 +101,6 @@ app.use('/', routes.index);
 app.use('/users', routes.users);
 app.use('/groups', routes.groups);
 app.use('/projects', routes.projects);
-app.use('/tasks', routes.tasks);
-app.use('/events', routes.events);
 */
 
 // catch 404 and forward to error handler

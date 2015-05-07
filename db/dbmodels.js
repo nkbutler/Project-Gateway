@@ -175,8 +175,9 @@ module.exports = {
       id          : { type : Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
       name        : { type : Sequelize.STRING },
       description : { type : Sequelize.STRING },
-      date        : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
-      location    : { type : Sequelize.STRING }
+      date        : { type : Sequelize.STRING },
+      location    : { type : Sequelize.STRING },
+      created     : { type : Sequelize.DATE, defaultValue : Sequelize.NOW },
     },
     relations : [function() {
       this.Project.belongsToMany(this.Event, { through : this.ProjectEvent });

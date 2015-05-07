@@ -1,0 +1,22 @@
+extends ../mainLayout
+//Task Home
+block content
+  .container
+    .col-md-3.well
+      h3 #{page.task.name}
+      hr
+      ul.nav.nav-pills.nav-stacked
+        block taskNav
+          - var urlBase = '/task/' + page.task.id + '-' + page.task.name;
+          li.active: a(href=urlBase) Description
+          li: a(href=urlBase + '/members') Working On
+          li: a(href=urlBase + '/progress') Progress
+          li: a(href=urlBase + '/comments') Comments
+    .col-md-9.well
+      block taskContent
+        h1 About
+        hr
+        h4 #{page.task.description}
+        br
+        h5 Created: #{page.task.created}
+        h5 Deadline: #{page.task.due}
